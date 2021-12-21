@@ -1,0 +1,23 @@
+type Comment {
+  id: ID!
+  creationTime: DateTime
+  modificationTime: DateTime
+  contents: NonEmptyString
+  imageUrls: [URL!]
+  isLiked: Boolean!
+  isModified: Boolean!
+  likedCount: NonNegativeInt!
+
+  # from other table
+  "이 댓글의 상위 댓글"
+  parentComment: Comment
+
+  "이 댓글이 달린 피드"
+  post: Post
+
+  "대댓글"
+  subcomments: [Comment!]
+
+  "댓글을 작성한 사용자"
+  user: User
+}

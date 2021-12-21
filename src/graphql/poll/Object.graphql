@@ -1,0 +1,29 @@
+type Poll {
+  id: ID!
+  creationTime: DateTime!
+  closingTime: DateTime!
+  title: NonEmptyString!
+  status: Status!
+
+  # nullable
+  contents: NonEmptyString
+
+  # from other table
+  selection: [PollSelection!]
+}
+
+type PollSelection {
+  id: ID!
+  creationTime: DateTime!
+  contents: NonEmptyString!
+  count: NonNegativeInt!
+
+  # from other table
+  poll: Poll!
+}
+
+enum Status {
+  PLANNED
+  ONGOING
+  CLOSED
+}

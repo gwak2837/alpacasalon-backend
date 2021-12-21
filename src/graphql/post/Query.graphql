@@ -1,0 +1,13 @@
+type Query {
+  "글 상세"
+  post(id: ID!): Post
+
+  "글 목록"
+  posts(pagination: Pagination!): [Post!]
+
+  "글 검색"
+  searchPosts(keywords: [NonEmptyString!]!): [Post!]
+
+  "이번 달 핫한 이야기"
+  famousPosts: [Post!]
+}

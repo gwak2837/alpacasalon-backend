@@ -1,0 +1,9 @@
+type Mutation {
+  toggleLikingComment(id: ID!): Comment
+
+  createComment(postId: ID!, contents: NonEmptyString!, commentId: ID): Comment
+
+  updateComment(id: ID!, contents: NonEmptyString!): Comment
+
+  deleteComment(id: ID!): Comment
+}

@@ -1,0 +1,17 @@
+type Group {
+  id: UUID!
+  creationTime: DateTime!
+  modificationTime: DateTime!
+  name: NonEmptyString!
+
+  # nullable
+  description: NonEmptyString
+  imageUrl: URL
+}
+
+enum Gender {
+  UNKNOWN
+  MALE
+  FEMALE
+  OTHER
+}

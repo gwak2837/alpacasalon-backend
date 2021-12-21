@@ -1,4 +1,4 @@
-# 🦙 알파카 살롱 (Alpaca Salon) Backend
+# 🦙 알파카살롱 (Alpacasalon) Backend
 
 알파카가 모여 공감해주고 즐겁게 얘기하는 공간
 
@@ -8,18 +8,18 @@
 - [Git](https://git-scm.com/downloads) 2.32
 - [Node](https://hub.docker.com/_/node) 16 Alpine
 - [Yarn](https://yarnpkg.com/getting-started/install#about-global-installs) berry
-- [Visual Studio Code](https://code.visualstudio.com/Download) 1.61
+- [Visual Studio Code](https://code.visualstudio.com/Download) 1.63
 - [PostgreSQL](https://hub.docker.com/_/postgres) 14 Alpine
 - [Docker](https://www.docker.com/get-started) 20.10
 - Docker Compose 1.29
 
 ```bash
-$ git --version
-$ node --version
-$ yarn --version
-$ code --version
-$ docker --version
-$ docker-compose --version
+git --version
+node --version
+yarn --version
+code --version
+docker --version
+docker-compose --version
 ```
 
 위 명령어를 통해 프로젝트에 필요한 모든 프로그램이 설치되어 있는지 확인합니다.
@@ -33,10 +33,10 @@ $ docker-compose --version
 ### Download codes
 
 ```bash
-$ git clone https://github.com/rmfpdlxmtidl/alpacasalon-backend.git
-$ cd alpacasalon-backend
-$ git checkout main
-$ yarn
+git clone https://github.com/rmfpdlxmtidl/alpacasalon-backend.git
+cd alpacasalon-backend
+git checkout main
+yarn
 ```
 
 프로젝트를 다운로드 받고 해당 폴더로 이동한 후 적절한 브랜치(`main` 등)로 이동하고 프로젝트에 필요한 외부 패키지를 설치합니다.
@@ -45,15 +45,15 @@ $ yarn
 
 ### Create environment variables
 
-루트 폴더에 `.env`, `.env.development`, `.env.local`, `.env.test` 파일을 생성하고 프로젝트에서 사용되는 환경 변수를 설정합니다.
+루트 폴더에 `.env`, `.env.development`, `.env.development.local`, `.env.local`, `.env.test` 파일을 생성하고 프로젝트에서 사용되는 환경 변수를 설정합니다.
 
 ### Initialize database
 
 ```bash
-yarn import-db 환경변수파일위치
+yarn import 옵션
 ```
 
-그리고 `import-db` 스크립트를 실행해 [`database/initialization.sql`](database/initialization.sql)와 CSV 파일로 되어 있는 더미데이터를 넣어줍니다.
+그리고 `import` 스크립트를 실행해 [`database/initialization.sql`](database/initialization.sql)와 CSV 파일로 되어 있는 더미데이터를 넣어줍니다.
 
 ### Start Node.js server
 
@@ -247,18 +247,18 @@ $ yarn generate-db {환경 변수 파일 위치}
 
 PostgreSQL 데이터베이스 구조를 바탕으로 TypeScript 기반 자료형이 담긴 파일을 생성합니다.
 
-#### `export-db`
+#### `export`
 
 ```bash
-$ yarn export-db {환경 변수 파일 위치}
+$ yarn export 옵션
 ```
 
 PostgreSQL 데이터베이스에 있는 모든 스키마의 모든 테이블을 CSV 파일로 저장합니다. 더미 데이터 CSV 파일을 변경하기 전에 수행합니다.
 
-#### `import-db`
+#### `import`
 
 ```bash
-$ yarn import-db {환경 변수 파일 위치}
+$ yarn import 옵션
 ```
 
 CSV 파일을 PostgreSQL 데이터베이스에 삽입합니다.
@@ -269,6 +269,6 @@ CSV 파일을 PostgreSQL 데이터베이스에 삽입합니다.
 https://slack.github.com/
 
 # https://github.com/integrations/slack#subscribing-and-unsubscribing
-/github subscribe rmfpdlxmtidl/alpaca-salon-backend commits:* reviews comments
-/github unsubscribe rmfpdlxmtidl/alpaca-salon-backend deployments
+/github subscribe rmfpdlxmtidl/alpacasalon-backend commits:* reviews comments
+/github unsubscribe rmfpdlxmtidl/alpacasalon-backend deployments
 ```

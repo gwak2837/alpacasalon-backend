@@ -1,14 +1,13 @@
 INSERT INTO "user" (
-    nickname,
-    image_url,
     email,
+    nickname,
     phone_number,
-    gender,
     birthyear,
     birthday,
+    gender,
     bio,
-    kakao_oauth,
-    password_hash
+    image_url,
+    kakao_oauth
   )
 VALUES(
     $1,
@@ -19,8 +18,7 @@ VALUES(
     $6,
     $7,
     $8,
-    $9,
-    'kakao'
+    $9
   )
 RETURNING id,
   phone_number

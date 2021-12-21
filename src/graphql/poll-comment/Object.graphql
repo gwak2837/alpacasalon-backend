@@ -1,0 +1,13 @@
+type PollComment {
+  id: ID!
+  creationTime: DateTime!
+  modificationTime: DateTime!
+  title: NonEmptyString!
+  status: Status!
+
+  # nullable
+  contents: NonEmptyString
+
+  # from other table
+  selection: [PollSelection!]
+}

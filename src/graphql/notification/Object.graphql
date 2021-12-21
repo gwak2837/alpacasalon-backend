@@ -1,0 +1,16 @@
+type Notification {
+  id: UUID!
+  creationTime: DateTime!
+  type: Type!
+  contents: NonEmptyString!
+
+  # from other table
+  receiver: User!
+  sender: User
+}
+
+enum Type {
+  NEW_COMMENT
+  LIKING_COMMENT
+  NEW_SUBCOMMENT
+}

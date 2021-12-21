@@ -18,49 +18,51 @@ GRANT ALL ON SCHEMA deleted TO alpacasalon;
 
 -- validation_time 이전 JWT 토큰은 유효하지 않음
 -- gender: 0=미확인, 1=남성, 2=여성
+-- 
 CREATE TABLE "user" (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modification_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   email varchar(50) UNIQUE,
-  phone_number varchar(20) UNIQUE,
   nickname varchar(20) UNIQUE,
-  bio varchar(100),
+  phone_number varchar(20) UNIQUE,
   birthyear char(4),
   birthday char(4),
   gender int,
+  bio varchar(100),
   image_url text,
   --
   kakao_oauth text UNIQUE,
   validation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 그룹 삭제 시 creation_time 등 삭제되기 때문에 nullable
+CREATE TABLE "group" (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  creation_time timestamptz DEFAULT CURRENT_TIMESTAMP,
+  modification_time timestamptz DEFAULT CURRENT_TIMESTAMP,
+  name varchar(20) NOT NULL,
+  description varchar(100),
+  image_url text
+);
+
 CREATE TABLE post (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modification_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  creation_time timestamptz DEFAULT CURRENT_TIMESTAMP,
+  modification_time timestamptz DEFAULT CURRENT_TIMESTAMP,
   title varchar(100) NOT NULL,
   contents text NOT NULL,
   image_urls text [],
   --
-  user_id uuid NOT NULL REFERENCES "user" ON DELETE
+  user_id uuid REFERENCES "user" ON DELETE
   SET NULL,
-    group_id bigint NOT NULL REFERENCES "group" ON DELETE
+    group_id bigint REFERENCES "group" ON DELETE
   SET NULL
-);
-
-CREATE TABLE group (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modification_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  name varchar(20) NOT NULL,
-  description varchar(100) NOT NULL,
-  image_url text
 );
 
 CREATE TABLE user_x_group (
   user_id uuid REFERENCES "user" ON DELETE CASCADE,
-  group_id bigint REFERENCES group ON DELETE CASCADE,
+  group_id bigint REFERENCES "group" ON DELETE CASCADE,
   creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY (user_id, group_id)
@@ -79,8 +81,8 @@ CREATE TABLE notification (
 
 CREATE TABLE "comment" (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modification_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  creation_time timestamptz DEFAULT CURRENT_TIMESTAMP,
+  modification_time timestamptz DEFAULT CURRENT_TIMESTAMP,
   contents text,
   image_urls text [],
   --
@@ -103,9 +105,10 @@ CREATE TABLE user_x_liked_comment (
 CREATE TABLE poll (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  closed_time timestamptz,
-  contents text NOT NULL,
-  "status" int NOT NULL DEFAULT 0
+  closing_time timestamptz,
+  title varchar(100) NOT NULL,
+  "status" int NOT NULL DEFAULT 0,
+  contents text
 );
 
 CREATE TABLE poll_selection (
@@ -114,12 +117,12 @@ CREATE TABLE poll_selection (
   contents text NOT NULL,
   "count" int,
   --
-  poll_id bigint REFERENCES poll ON DELETE CASCADE,
+  poll_id bigint REFERENCES poll ON DELETE CASCADE
 );
 
 CREATE TABLE poll_selection_x_user (
   poll_selection_id bigint REFERENCES poll_selection ON DELETE CASCADE,
-  user_id bigint REFERENCES "user" ON DELETE CASCADE,
+  user_id uuid REFERENCES "user" ON DELETE CASCADE,
   creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY (poll_selection_id, user_id)
@@ -127,8 +130,8 @@ CREATE TABLE poll_selection_x_user (
 
 CREATE TABLE poll_comment (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modification_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  creation_time timestamptz DEFAULT CURRENT_TIMESTAMP,
+  modification_time timestamptz DEFAULT CURRENT_TIMESTAMP,
   contents text,
   image_urls text [],
   --
@@ -165,6 +168,16 @@ CREATE TABLE deleted.user (
   kakao_oauth text
 );
 
+CREATE TABLE deleted.group (
+  id bigint PRIMARY KEY,
+  creation_time timestamptz NOT NULL,
+  modification_time timestamptz NOT NULL,
+  deletion_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  name varchar(20) NOT NULL,
+  description varchar(100) NOT NULL,
+  image_url text
+);
+
 CREATE TABLE deleted.post (
   id bigint PRIMARY KEY,
   creation_time timestamptz NOT NULL,
@@ -176,16 +189,6 @@ CREATE TABLE deleted.post (
   --
   user_id uuid NOT NULL,
   group_id bigint NOT NULL
-);
-
-CREATE TABLE deleted.group (
-  id bigint PRIMARY KEY,
-  creation_time timestamptz NOT NULL,
-  modification_time timestamptz NOT NULL,
-  deletion_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  name varchar(20) NOT NULL,
-  description varchar(100) NOT NULL,
-  image_url text
 );
 
 CREATE TABLE deleted.comment (

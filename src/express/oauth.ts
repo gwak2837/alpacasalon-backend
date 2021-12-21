@@ -19,7 +19,7 @@ function encodeGender(gender: string) {
 
 function verifyTargetCustomer(user: any) {
   // return user.gender === 'female' && +user.birthyear < 1980
-  return true
+  return new Date().getFullYear() - +user.birthyear >= 19 // 성인만 가입 가능
 }
 
 function hasRequiredInfo(user: any) {
@@ -94,14 +94,14 @@ export function setOAuthStrategies(app: Express) {
     // kakao 소셜 로그인 정보가 없는 경우
     const kakaoAccount = kakaoUserInfo.kakao_account as any
     const { rows } = await poolQuery(registerKakaoUser, [
-      null,
-      null,
       kakaoAccount.email,
+      null,
       kakaoAccount.phone_number,
-      encodeGender(kakaoAccount.gender),
       kakaoAccount.birthyear,
       kakaoAccount.birthday,
+      encodeGender(kakaoAccount.gender),
       '알파카의 소개가 아직 없어요.',
+      null,
       kakaoUserInfo.id,
     ])
     const newKakaoUser = rows[0]
