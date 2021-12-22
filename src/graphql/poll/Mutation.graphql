@@ -1,5 +1,7 @@
 type Mutation {
-  createPoll(input: PollCreation!)
+  createPoll(input: PollCreationInput!): Poll
 }
 
-
+input PollCreationInput {
+  title: NonEmptyString!
+}

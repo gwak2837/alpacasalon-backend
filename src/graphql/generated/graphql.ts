@@ -83,6 +83,7 @@ export type Mutation = {
   __typename?: 'Mutation'
   createComment?: Maybe<Comment>
   createGroup?: Maybe<Group>
+  createPoll?: Maybe<Poll>
   createPost?: Maybe<Post>
   deleteComment?: Maybe<Comment>
   deleteGroup?: Maybe<Group>
@@ -108,6 +109,10 @@ export type MutationCreateCommentArgs = {
 
 export type MutationCreateGroupArgs = {
   input: GroupCreationInput
+}
+
+export type MutationCreatePollArgs = {
+  input: PollCreationInput
 }
 
 export type MutationCreatePostArgs = {
@@ -191,6 +196,10 @@ export type PollComment = {
   modificationTime: Scalars['DateTime']
   selection?: Maybe<Array<PollSelection>>
   status: Status
+  title: Scalars['NonEmptyString']
+}
+
+export type PollCreationInput = {
   title: Scalars['NonEmptyString']
 }
 
@@ -432,6 +441,7 @@ export type ResolversTypes = {
   Pagination: Pagination
   Poll: ResolverTypeWrapper<Poll>
   PollComment: ResolverTypeWrapper<PollComment>
+  PollCreationInput: PollCreationInput
   PollSelection: ResolverTypeWrapper<PollSelection>
   PositiveInt: ResolverTypeWrapper<Scalars['PositiveInt']>
   Post: ResolverTypeWrapper<Post>
@@ -470,6 +480,7 @@ export type ResolversParentTypes = {
   Pagination: Pagination
   Poll: Poll
   PollComment: PollComment
+  PollCreationInput: PollCreationInput
   PollSelection: PollSelection
   PositiveInt: Scalars['PositiveInt']
   Post: Post
@@ -563,6 +574,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationCreateGroupArgs, 'input'>
+  >
+  createPoll?: Resolver<
+    Maybe<ResolversTypes['Poll']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreatePollArgs, 'input'>
   >
   createPost?: Resolver<
     Maybe<ResolversTypes['Post']>,

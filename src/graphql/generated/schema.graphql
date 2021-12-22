@@ -75,6 +75,7 @@ scalar Longitude
 type Mutation {
   createComment(commentId: ID, contents: NonEmptyString!, postId: ID!): Comment
   createGroup(input: GroupCreationInput!): Group
+  createPoll(input: PollCreationInput!): Poll
   createPost(input: PostCreationInput!): Post
   deleteComment(id: ID!): Comment
   deleteGroup(id: ID!): Group
@@ -144,6 +145,10 @@ type PollComment {
   modificationTime: DateTime!
   selection: [PollSelection!]
   status: Status!
+  title: NonEmptyString!
+}
+
+input PollCreationInput {
   title: NonEmptyString!
 }
 
