@@ -223,15 +223,29 @@ INSERT INTO deleted.user(
     creation_time,
     modification_time,
     email,
+    nickname,
     phone_number,
-    gender,
     birthyear,
     birthday,
-    google_oauth,
-    naver_oauth,
+    gender,
+    bio,
+    image_url,
     kakao_oauth
   )
-VALUES((OLD).*);
+VALUES(
+    OLD.id,
+    OLD.creation_time,
+    OLD.modification_time,
+    OLD.email,
+    OLD.nickname,
+    OLD.phone_number,
+    OLD.birthyear,
+    OLD.birthday,
+    OLD.gender,
+    OLD.bio,
+    OLD.image_url,
+    OLD.kakao_oauth
+  );
 
 RETURN OLD;
 
