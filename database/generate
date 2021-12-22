@@ -8,13 +8,5 @@ fi
 
 export $(grep -v '^#' $ENV_FILE_PATH | xargs)
 
-if [[ $CONNECTION_STRING =~ "@localhost" ]]; then
-  CONNECTION_STRING_WITH_SSL=$CONNECTION_STRING
-else
-  CONNECTION_STRING_WITH_SSL=$CONNECTION_STRING?sslmode=require
-fi
-
-echo $CONNECTION_STRING_WITH_SSL
-
-NODE_TLS_REJECT_UNAUTHORIZED=0 schemats postgres $CONNECTION_STRING_WITH_SSL -o src/database/${POSTGRES_DB}.ts
+schemats postgres $CONNECTION_STRING -o src/database/${POSTGRES_DB}.ts
 prettier src/database/${POSTGRES_DB}.ts --write

@@ -32,36 +32,36 @@ do_not_print=$(PGOPTIONS='--client-min-messages=warning' psql $CONNECTION_STRING
 # 테이블 순서 중요
 public_tables=(
   public.user
+  public.group
   public.post
+  public.user_x_group
+  public.notification
   public.comment
-  public.hashtag
-  public.event
-  public.question
-  public.answer
-  public.answer_comment
   public.user_x_liked_comment
-  public.user_x_liked_event
-  public.user_x_reserved_event
-  public.post_x_hashtag
+  public.poll
+  public.poll_selection
+  public.poll_selection_x_user
+  public.poll_comment
+  public.user_x_liked_poll_comment
 )
 
 sequence_tables=(
-  answer_comment
-  answer
-  comment
-  event
-  hashtag
+  \"group\"
   post
-  question
+  notification
+  comment
+  poll
+  poll_selection
+  poll_comment
 )
 
 # 테이블 순서 중요
 deleted_tables=(
   deleted.user
+  deleted.group
   deleted.post
   deleted.comment
-  deleted.hashtag
-  deleted.event
+  deleted.poll_comment
 )
 
 for public_table in "${public_tables[@]}"; do
