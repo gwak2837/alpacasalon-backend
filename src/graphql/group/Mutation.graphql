@@ -1,0 +1,22 @@
+type Mutation {
+  createGroup(input: GroupCreationInput!): Group
+
+  updateGroup(input: GroupModificationInput!): Group
+
+  deleteGroup(id: ID!): Group
+
+  joinGroup(id: ID): Boolean
+}
+
+input GroupCreationInput {
+  name: NonEmptyString!
+  description: NonEmptyString
+  imageUrl: URL
+}
+
+input GroupModificationInput {
+  id: ID!
+  name: NonEmptyString
+  description: NonEmptyString
+  imageUrl: URL
+}

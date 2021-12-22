@@ -10,7 +10,6 @@ export function postORM(row: Record<string, any>) {
     id: row.id,
     creationTime: row.creation_time,
     modificationTime: row.modification_time,
-    category: row.category,
     title: row.title,
     contents: getFirstLine(row.contents),
     imageUrls: row.image_urls,

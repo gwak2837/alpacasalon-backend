@@ -66,18 +66,35 @@ export type Group = {
   name: Scalars['NonEmptyString']
 }
 
+export type GroupCreationInput = {
+  description?: InputMaybe<Scalars['NonEmptyString']>
+  imageUrl?: InputMaybe<Scalars['URL']>
+  name: Scalars['NonEmptyString']
+}
+
+export type GroupModificationInput = {
+  description?: InputMaybe<Scalars['NonEmptyString']>
+  id: Scalars['ID']
+  imageUrl?: InputMaybe<Scalars['URL']>
+  name?: InputMaybe<Scalars['NonEmptyString']>
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   createComment?: Maybe<Comment>
+  createGroup?: Maybe<Group>
   createPost?: Maybe<Post>
   deleteComment?: Maybe<Comment>
+  deleteGroup?: Maybe<Group>
   deletePost?: Maybe<Post>
+  joinGroup?: Maybe<Scalars['Boolean']>
   /** 로그아웃 성공 여부 반환 */
   logout: Scalars['Boolean']
   toggleLikingComment?: Maybe<Comment>
   /** 회원탈퇴 시 사용자 정보가 모두 초기화됩니다 */
   unregister?: Maybe<User>
   updateComment?: Maybe<Comment>
+  updateGroup?: Maybe<Group>
   updatePost?: Maybe<Post>
   /** 사용자 정보를 수정합니다 */
   updateUser?: Maybe<User>
@@ -89,6 +106,10 @@ export type MutationCreateCommentArgs = {
   postId: Scalars['ID']
 }
 
+export type MutationCreateGroupArgs = {
+  input: GroupCreationInput
+}
+
 export type MutationCreatePostArgs = {
   input: PostCreationInput
 }
@@ -97,8 +118,16 @@ export type MutationDeleteCommentArgs = {
   id: Scalars['ID']
 }
 
+export type MutationDeleteGroupArgs = {
+  id: Scalars['ID']
+}
+
 export type MutationDeletePostArgs = {
   id: Scalars['ID']
+}
+
+export type MutationJoinGroupArgs = {
+  id?: InputMaybe<Scalars['ID']>
 }
 
 export type MutationToggleLikingCommentArgs = {
@@ -108,6 +137,10 @@ export type MutationToggleLikingCommentArgs = {
 export type MutationUpdateCommentArgs = {
   contents: Scalars['NonEmptyString']
   id: Scalars['ID']
+}
+
+export type MutationUpdateGroupArgs = {
+  input: GroupModificationInput
 }
 
 export type MutationUpdatePostArgs = {
@@ -214,10 +247,15 @@ export type Query = {
   me?: Maybe<User>
   /** 내가 쓴 댓글 */
   myComments?: Maybe<Array<Comment>>
+  myGroups?: Maybe<Array<Group>>
+  myNotifications?: Maybe<Array<Notification>>
+  participatingPolls?: Maybe<Array<Poll>>
   /** 글 상세 */
   post?: Maybe<Post>
   /** 글 목록 */
   posts?: Maybe<Array<Post>>
+  postsByGroup?: Maybe<Array<Post>>
+  recommendationGroups?: Maybe<Array<Group>>
   /** 글 검색 */
   searchPosts?: Maybe<Array<Post>>
   /** 닉네임으로 사용자 검색 */
@@ -272,8 +310,8 @@ export type User = {
   imageUrl?: Maybe<Scalars['URL']>
   likedCount: Scalars['NonNegativeInt']
   modificationTime: Scalars['DateTime']
-  nickname: Scalars['NonEmptyString']
-  phoneNumber: Scalars['NonEmptyString']
+  nickname?: Maybe<Scalars['NonEmptyString']>
+  phoneNumber?: Maybe<Scalars['NonEmptyString']>
 }
 
 export type UserModificationInput = {
@@ -378,6 +416,8 @@ export type ResolversTypes = {
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>
   Gender: Gender
   Group: ResolverTypeWrapper<Group>
+  GroupCreationInput: GroupCreationInput
+  GroupModificationInput: GroupModificationInput
   ID: ResolverTypeWrapper<Scalars['ID']>
   Int: ResolverTypeWrapper<Scalars['Int']>
   JWT: ResolverTypeWrapper<Scalars['JWT']>
@@ -415,6 +455,8 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime']
   EmailAddress: Scalars['EmailAddress']
   Group: Group
+  GroupCreationInput: GroupCreationInput
+  GroupModificationInput: GroupModificationInput
   ID: Scalars['ID']
   Int: Scalars['Int']
   JWT: Scalars['JWT']
@@ -516,6 +558,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateCommentArgs, 'contents' | 'postId'>
   >
+  createGroup?: Resolver<
+    Maybe<ResolversTypes['Group']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateGroupArgs, 'input'>
+  >
   createPost?: Resolver<
     Maybe<ResolversTypes['Post']>,
     ParentType,
@@ -528,11 +576,23 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationDeleteCommentArgs, 'id'>
   >
+  deleteGroup?: Resolver<
+    Maybe<ResolversTypes['Group']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteGroupArgs, 'id'>
+  >
   deletePost?: Resolver<
     Maybe<ResolversTypes['Post']>,
     ParentType,
     ContextType,
     RequireFields<MutationDeletePostArgs, 'id'>
+  >
+  joinGroup?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationJoinGroupArgs, never>
   >
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   toggleLikingComment?: Resolver<
@@ -547,6 +607,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationUpdateCommentArgs, 'contents' | 'id'>
+  >
+  updateGroup?: Resolver<
+    Maybe<ResolversTypes['Group']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateGroupArgs, 'input'>
   >
   updatePost?: Resolver<
     Maybe<ResolversTypes['Post']>,
@@ -667,6 +733,9 @@ export type QueryResolvers<
   likedComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   myComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>
+  myGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>
+  myNotifications?: Resolver<Maybe<Array<ResolversTypes['Notification']>>, ParentType, ContextType>
+  participatingPolls?: Resolver<Maybe<Array<ResolversTypes['Poll']>>, ParentType, ContextType>
   post?: Resolver<
     Maybe<ResolversTypes['Post']>,
     ParentType,
@@ -679,6 +748,8 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryPostsArgs, 'pagination'>
   >
+  postsByGroup?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>
+  recommendationGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>
   searchPosts?: Resolver<
     Maybe<Array<ResolversTypes['Post']>>,
     ParentType,
@@ -715,8 +786,8 @@ export type UserResolvers<
   imageUrl?: Resolver<Maybe<ResolversTypes['URL']>, ParentType, ContextType>
   likedCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>
   modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
-  nickname?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
-  phoneNumber?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
+  nickname?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
+  phoneNumber?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 

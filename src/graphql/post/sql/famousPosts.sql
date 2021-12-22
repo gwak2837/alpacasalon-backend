@@ -1,7 +1,6 @@
 SELECT post.id,
   post.creation_time,
   post.modification_time,
-  category,
   title,
   post.contents,
   post.image_urls,

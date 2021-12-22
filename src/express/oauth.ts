@@ -18,7 +18,7 @@ function encodeGender(gender: string) {
 }
 
 function verifyTargetCustomer(user: any) {
-  // return user.gender === 'female' && +user.birthyear < 1980
+  // return user.gender === 'female' && new Date().getFullYear() - +user.birthyear >= 40 // 여성 & 40대 이상만 가입 가능
   return new Date().getFullYear() - +user.birthyear >= 19 // 성인만 가입 가능
 }
 
@@ -60,6 +60,7 @@ export function setOAuthStrategies(app: Express) {
     }
 
     const kakaoUserInfo = await fetchKakaoUserInfo(kakaoUserToken.access_token as string)
+    const kakaoAccount = kakaoUserInfo.kakao_account as any
 
     const findKakaoUserResult = await poolQuery(findKakaoUser, [kakaoUserInfo.id])
     const kakaoUser = findKakaoUserResult.rows[0]
@@ -69,7 +70,7 @@ export function setOAuthStrategies(app: Express) {
     // 이미 kakao 소셜 로그인 정보가 존재하는 경우
     if (kakaoUser?.id) {
       // 4050 여성이 아닌 경우
-      if (!verifyTargetCustomer(kakaoUser)) {
+      if (!verifyTargetCustomer(kakaoAccount)) {
         return res.redirect(`${frontendUrl}/sorry`)
       }
 
@@ -92,7 +93,6 @@ export function setOAuthStrategies(app: Express) {
     }
 
     // kakao 소셜 로그인 정보가 없는 경우
-    const kakaoAccount = kakaoUserInfo.kakao_account as any
     const { rows } = await poolQuery(registerKakaoUser, [
       kakaoAccount.email,
       null,
@@ -107,7 +107,7 @@ export function setOAuthStrategies(app: Express) {
     const newKakaoUser = rows[0]
 
     // 4050 여성이 아닌 경우
-    if (!verifyTargetCustomer(newKakaoUser)) {
+    if (!verifyTargetCustomer(kakaoAccount)) {
       return res.redirect(`${frontendUrl}/sorry`)
     }
 
@@ -118,4 +118,6 @@ export function setOAuthStrategies(app: Express) {
 
     return res.redirect(`${frontendUrl}/oauth/register?${queryString}`)
   })
+
+  // app.get('/oauth/kakao/unregister', async (req, res) => {})
 }

@@ -51,6 +51,19 @@ type Group {
   name: NonEmptyString!
 }
 
+input GroupCreationInput {
+  description: NonEmptyString
+  imageUrl: URL
+  name: NonEmptyString!
+}
+
+input GroupModificationInput {
+  description: NonEmptyString
+  id: ID!
+  imageUrl: URL
+  name: NonEmptyString
+}
+
 scalar JWT
 
 scalar LastValue
@@ -61,9 +74,12 @@ scalar Longitude
 
 type Mutation {
   createComment(commentId: ID, contents: NonEmptyString!, postId: ID!): Comment
+  createGroup(input: GroupCreationInput!): Group
   createPost(input: PostCreationInput!): Post
   deleteComment(id: ID!): Comment
+  deleteGroup(id: ID!): Group
   deletePost(id: ID!): Post
+  joinGroup(id: ID): Boolean
 
   """
   로그아웃 성공 여부 반환
@@ -76,6 +92,7 @@ type Mutation {
   """
   unregister: User
   updateComment(contents: NonEmptyString!, id: ID!): Comment
+  updateGroup(input: GroupModificationInput!): Group
   updatePost(input: PostModificationInput!): Post
 
   """
@@ -208,6 +225,9 @@ type Query {
   내가 쓴 댓글
   """
   myComments: [Comment!]
+  myGroups: [Group!]
+  myNotifications: [Notification!]
+  participatingPolls: [Poll!]
 
   """
   글 상세
@@ -218,6 +238,8 @@ type Query {
   글 목록
   """
   posts(pagination: Pagination!): [Post!]
+  postsByGroup: [Post!]
+  recommendationGroups: [Group!]
 
   """
   글 검색
@@ -257,8 +279,8 @@ type User {
   imageUrl: URL
   likedCount: NonNegativeInt!
   modificationTime: DateTime!
-  nickname: NonEmptyString!
-  phoneNumber: NonEmptyString!
+  nickname: NonEmptyString
+  phoneNumber: NonEmptyString
 }
 
 input UserModificationInput {

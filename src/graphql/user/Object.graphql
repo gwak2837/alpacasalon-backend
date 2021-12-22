@@ -3,8 +3,6 @@ type User {
   creationTime: DateTime!
   modificationTime: DateTime!
   email: EmailAddress!
-  nickname: NonEmptyString!
-  phoneNumber: NonEmptyString!
   birthyear: Int!
   birthday: NonEmptyString!
   gender: Gender!
@@ -12,6 +10,8 @@ type User {
   # nullable
   bio: NonEmptyString
   imageUrl: URL
+  nickname: NonEmptyString
+  phoneNumber: NonEmptyString
 
   # from other table
   likedCount: NonNegativeInt!
