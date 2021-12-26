@@ -46,6 +46,14 @@ CREATE TABLE "group" (
   image_url text
 );
 
+CREATE TABLE user_x_group (
+  user_id uuid REFERENCES "user" ON DELETE CASCADE,
+  group_id bigint REFERENCES "group" ON DELETE CASCADE,
+  creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY (user_id, group_id)
+);
+
 CREATE TABLE post (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   creation_time timestamptz DEFAULT CURRENT_TIMESTAMP,
@@ -60,19 +68,12 @@ CREATE TABLE post (
   SET NULL
 );
 
-CREATE TABLE user_x_group (
-  user_id uuid REFERENCES "user" ON DELETE CASCADE,
-  group_id bigint REFERENCES "group" ON DELETE CASCADE,
-  creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  --
-  PRIMARY KEY (user_id, group_id)
-);
-
 CREATE TABLE notification (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "type" int NOT NULL,
   contents text NOT NULL,
+  is_read boolean NOT NULL DEFAULT FALSE,
   --
   receiver_id uuid NOT NULL REFERENCES "user" ON DELETE CASCADE,
   sender_id uuid REFERENCES "user" ON DELETE
@@ -252,6 +253,22 @@ RETURN OLD;
 END $$;
 
 CREATE TRIGGER delete_user BEFORE DELETE ON "user" FOR EACH ROW EXECUTE FUNCTION delete_user();
+
+CREATE FUNCTION create_group(
+  user_id uuid,
+  name varchar(20),
+  description varchar(100) DEFAULT NULL,
+  image_url text DEFAULT NULL,
+  out group_id bigint
+) LANGUAGE plpgsql AS $$ BEGIN
+INSERT INTO "group" (name, description, image_url)
+VALUES ($1, $2, $3)
+RETURNING id INTO group_id;
+
+INSERT INTO user_x_group(user_id, group_id)
+VALUES(create_group.user_id, create_group.group_id);
+
+END $$;
 
 CREATE FUNCTION delete_comment (
   comment_id bigint,
