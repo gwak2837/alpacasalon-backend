@@ -12,12 +12,11 @@ export const Mutation: MutationResolvers<ApolloContext> = {
   createPost: async (_, { input }, { userId }) => {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
-    const { rows } = await poolQuery(createPost, [
-      input.title,
-      input.contents,
-      input.imageUrls?.map((imageUrl) => imageUrl.href),
-      userId,
-    ])
+    const imageUrls = input.imageUrls?.map((imageUrl) => imageUrl.href)
+
+    // if (imageUrls.length === 0) throw new UserInputError('이미지 배열 확인 필요')
+
+    const { rows } = await poolQuery(createPost, [input.title, input.contents, imageUrls, userId])
 
     return graphqlRelationMapping(rows[0], 'post')
   },

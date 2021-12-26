@@ -45,8 +45,9 @@ enum Gender {
 type Group {
   creationTime: DateTime!
   description: NonEmptyString
-  id: UUID!
+  id: ID!
   imageUrl: URL
+  memberCount: NonNegativeInt!
   modificationTime: DateTime!
   name: NonEmptyString!
 }
@@ -188,9 +189,10 @@ type Post {
 }
 
 input PostCreationInput {
-  contents: String!
+  contents: NonEmptyString!
+  groupId: ID!
   imageUrls: [URL!]
-  title: String!
+  title: NonEmptyString!
 }
 
 input PostModificationInput {

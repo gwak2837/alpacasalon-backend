@@ -18,5 +18,9 @@ export function postORM(row: Record<string, any>) {
       id: row.user__id,
       nickname: row.user__nickname,
     },
+    group: {
+      id: row.group__id,
+      name: row.group__name,
+    },
   } as unknown as Post
 }

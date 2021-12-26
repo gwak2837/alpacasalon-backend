@@ -60,8 +60,9 @@ export type Group = {
   __typename?: 'Group'
   creationTime: Scalars['DateTime']
   description?: Maybe<Scalars['NonEmptyString']>
-  id: Scalars['UUID']
+  id: Scalars['ID']
   imageUrl?: Maybe<Scalars['URL']>
+  memberCount: Scalars['NonNegativeInt']
   modificationTime: Scalars['DateTime']
   name: Scalars['NonEmptyString']
 }
@@ -230,9 +231,10 @@ export type Post = {
 }
 
 export type PostCreationInput = {
-  contents: Scalars['String']
+  contents: Scalars['NonEmptyString']
+  groupId: Scalars['ID']
   imageUrls?: InputMaybe<Array<Scalars['URL']>>
-  title: Scalars['String']
+  title: Scalars['NonEmptyString']
 }
 
 export type PostModificationInput = {
@@ -533,8 +535,9 @@ export type GroupResolvers<
 > = {
   creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   description?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
-  id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['URL']>, ParentType, ContextType>
+  memberCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>
   modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>

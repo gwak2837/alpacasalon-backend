@@ -1,8 +1,9 @@
 type Group {
-  id: UUID!
+  id: ID!
   creationTime: DateTime!
   modificationTime: DateTime!
   name: NonEmptyString!
+  memberCount: NonNegativeInt!
 
   # nullable
   description: NonEmptyString
