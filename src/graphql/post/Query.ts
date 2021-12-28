@@ -30,7 +30,7 @@ export const Query: QueryResolvers<ApolloContext> = {
     }
 
     const { rows } = await poolQuery(sql, values)
-    console.log('👀 - rows', rows)
+
     return rows.map((row) => postORM(row))
   },
 
