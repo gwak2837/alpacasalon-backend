@@ -1,1 +1,1 @@
-id,creation_time,modification_time,title,contents,user_id
+id,creation_time,modification_time,deletion_time,title,contents,image_urls,user_id,group_id
