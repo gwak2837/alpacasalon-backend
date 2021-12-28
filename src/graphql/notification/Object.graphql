@@ -1,7 +1,7 @@
 type Notification {
   id: UUID!
   creationTime: DateTime!
-  type: Type!
+  type: NotificationType!
   contents: NonEmptyString!
 
   # from other table
@@ -9,7 +9,7 @@ type Notification {
   sender: User
 }
 
-enum Type {
+enum NotificationType {
   NEW_COMMENT
   LIKING_COMMENT
   NEW_SUBCOMMENT

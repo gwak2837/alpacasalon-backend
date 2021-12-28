@@ -1,10 +1,13 @@
 import { AuthenticationError, UserInputError } from 'apollo-server-errors'
 
 import type { ApolloContext } from '../../apollo/server'
-import { poolQuery } from '../../database/postgres'
+import { pool, poolQuery } from '../../database/postgres'
 import { Comment, MutationResolvers } from '../generated/graphql'
+import { getFirstLine } from '../post/ORM'
 import checkCommentInPost from './sql/checkCommentInPost.sql'
 import createComment from './sql/createComment.sql'
+import createNewCommentNotification from './sql/createNewCommentNotification.sql'
+import createNewSubcommentNotification from './sql/createNewSubcommentNotification.sql'
 import deleteComment from './sql/deleteComment.sql'
 import toggleLikingComment from './sql/toggleLikingComment.sql'
 
@@ -29,6 +32,22 @@ export const Mutation: MutationResolvers<ApolloContext> = {
     }
 
     const { rows } = await poolQuery(createComment, [contents, postId, userId, commentId])
+
+    if (commentId) {
+      pool
+        .query(createNewCommentNotification, [getFirstLine(contents), postId, userId])
+        .then(() => {
+          return 1
+        })
+        .catch((err) => console.error(err))
+    } else {
+      const { rows: rows2 } = await poolQuery(createNewSubcommentNotification, [
+        contents,
+        postId,
+        userId,
+        commentId,
+      ])
+    }
 
     return { id: rows[0].id } as Comment
   },

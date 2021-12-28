@@ -1,6 +1,6 @@
 import { Post } from '../generated/graphql'
 
-function getFirstLine(c: string) {
+export function getFirstLine(c: string) {
   const i = c.indexOf('\n')
   return i !== -1 ? c.slice(0, i + 1) : c
 }

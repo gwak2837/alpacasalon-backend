@@ -233,7 +233,7 @@ type Query {
   """
   myComments: [Comment!]
   myGroups: [Group!]
-  myNotifications: [Notification!]
+  notifications: [Notification!]
   participatingPolls: [Poll!]
 
   """

@@ -259,7 +259,7 @@ export type Query = {
   /** 내가 쓴 댓글 */
   myComments?: Maybe<Array<Comment>>
   myGroups?: Maybe<Array<Group>>
-  myNotifications?: Maybe<Array<Notification>>
+  notifications?: Maybe<Array<Notification>>
   participatingPolls?: Maybe<Array<Poll>>
   /** 글 상세 */
   post?: Maybe<Post>
@@ -754,7 +754,7 @@ export type QueryResolvers<
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   myComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>
   myGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>
-  myNotifications?: Resolver<Maybe<Array<ResolversTypes['Notification']>>, ParentType, ContextType>
+  notifications?: Resolver<Maybe<Array<ResolversTypes['Notification']>>, ParentType, ContextType>
   participatingPolls?: Resolver<Maybe<Array<ResolversTypes['Poll']>>, ParentType, ContextType>
   post?: Resolver<
     Maybe<ResolversTypes['Post']>,
