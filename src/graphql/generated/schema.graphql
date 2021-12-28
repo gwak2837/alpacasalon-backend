@@ -113,7 +113,13 @@ type Notification {
   id: UUID!
   receiver: User!
   sender: User
-  type: Type!
+  type: NotificationType!
+}
+
+enum NotificationType {
+  LIKING_COMMENT
+  NEW_COMMENT
+  NEW_SUBCOMMENT
 }
 
 """
@@ -263,12 +269,6 @@ enum Status {
   CLOSED
   ONGOING
   PLANNED
-}
-
-enum Type {
-  LIKING_COMMENT
-  NEW_COMMENT
-  NEW_SUBCOMMENT
 }
 
 scalar URL

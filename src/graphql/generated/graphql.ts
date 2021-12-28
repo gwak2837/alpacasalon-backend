@@ -164,7 +164,13 @@ export type Notification = {
   id: Scalars['UUID']
   receiver: User
   sender?: Maybe<User>
-  type: Type
+  type: NotificationType
+}
+
+export enum NotificationType {
+  LikingComment = 'LIKING_COMMENT',
+  NewComment = 'NEW_COMMENT',
+  NewSubcomment = 'NEW_SUBCOMMENT',
 }
 
 /** 기본값: 내림차순 */
@@ -303,12 +309,6 @@ export enum Status {
   Planned = 'PLANNED',
 }
 
-export enum Type {
-  LikingComment = 'LIKING_COMMENT',
-  NewComment = 'NEW_COMMENT',
-  NewSubcomment = 'NEW_SUBCOMMENT',
-}
-
 export type User = {
   __typename?: 'User'
   bio?: Maybe<Scalars['NonEmptyString']>
@@ -439,6 +439,7 @@ export type ResolversTypes = {
   NonEmptyString: ResolverTypeWrapper<Scalars['NonEmptyString']>
   NonNegativeInt: ResolverTypeWrapper<Scalars['NonNegativeInt']>
   Notification: ResolverTypeWrapper<Notification>
+  NotificationType: NotificationType
   OrderDirection: OrderDirection
   Pagination: Pagination
   Poll: ResolverTypeWrapper<Poll>
@@ -452,7 +453,6 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>
   Status: Status
   String: ResolverTypeWrapper<Scalars['String']>
-  Type: Type
   URL: ResolverTypeWrapper<Scalars['URL']>
   UUID: ResolverTypeWrapper<Scalars['UUID']>
   User: ResolverTypeWrapper<User>
@@ -667,7 +667,7 @@ export type NotificationResolvers<
   id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>
   receiver?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   sender?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
-  type?: Resolver<ResolversTypes['Type'], ParentType, ContextType>
+  type?: Resolver<ResolversTypes['NotificationType'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
