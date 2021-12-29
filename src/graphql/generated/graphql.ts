@@ -166,7 +166,8 @@ export type Notification = {
   __typename?: 'Notification'
   contents: Scalars['NonEmptyString']
   creationTime: Scalars['DateTime']
-  id: Scalars['UUID']
+  id: Scalars['ID']
+  isRead: Scalars['Boolean']
   receiver: User
   sender?: Maybe<User>
   type: NotificationType
@@ -675,7 +676,8 @@ export type NotificationResolvers<
 > = {
   contents?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
   creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
-  id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   receiver?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   sender?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   type?: Resolver<ResolversTypes['NotificationType'], ParentType, ContextType>

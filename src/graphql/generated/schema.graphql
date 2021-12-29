@@ -111,7 +111,8 @@ scalar NonNegativeInt
 type Notification {
   contents: NonEmptyString!
   creationTime: DateTime!
-  id: UUID!
+  id: ID!
+  isRead: Boolean!
   receiver: User!
   sender: User
   type: NotificationType!

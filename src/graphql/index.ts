@@ -7,6 +7,7 @@ import * as commonResolver from './common/common'
 import * as groupMutationResolver from './group/Mutation'
 import * as groupQueryResolver from './group/Query'
 import * as notificationMutationResolver from './notification/Mutation'
+import * as notificationObjectResolver from './notification/Object'
 import * as notificationQueryResolver from './notification/Query'
 import * as postMutationResolver from './post/Mutation'
 import * as postObjectResolver from './post/Object'
@@ -23,6 +24,7 @@ const resolversArray = [
   groupMutationResolver,
   groupQueryResolver,
   notificationMutationResolver,
+  notificationObjectResolver,
   notificationQueryResolver,
   postMutationResolver,
   postObjectResolver,
