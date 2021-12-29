@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 import { AuthenticationError, UserInputError } from 'apollo-server-errors'
 
 import type { ApolloContext } from '../../apollo/server'
@@ -20,30 +21,34 @@ export const Mutation: MutationResolvers<ApolloContext> = {
   toggleLikingComment: async (_, { id }, { userId }) => {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
-    const { rows } = await poolQuery(toggleLikingComment, [userId, id])
-    const isLiked = rows[0].result
+    const { rows } = await poolQuery(getLikingComment, [id])
+    const commentAuthor = rows[0].user_id
 
-    pool
-      .query(getLikingComment, [id])
-      .then(({ rows }) => {
-        if (isLiked) {
-          return poolQuery(createLikingCommentNotification, [
-            getFirstLine(rows[0].contents),
-            rows[0].user_id,
-            userId,
-          ])
-        } else {
-          return poolQuery(deleteLikingCommentNotification, [
-            new Date(Date.now() - 600_000),
-            getFirstLine(rows[0].contents),
-            rows[0].user_id,
-            userId,
-          ])
-        }
-      })
-      .catch((err) => console.error(err))
+    if (commentAuthor === userId) throw new UserInputError('댓글 자추는 지양해주세요~')
 
-    return { id, isLiked, likedCount: rows[0].liked_count } as Comment
+    const { rows: rows2 } = await poolQuery(toggleLikingComment, [userId, id])
+    const isLiked = rows2[0].result
+
+    if (isLiked) {
+      pool
+        .query(createLikingCommentNotification, [
+          getFirstLine(rows[0].contents),
+          rows[0].user_id,
+          userId,
+        ])
+        .catch((err) => console.error(err))
+    } else {
+      pool
+        .query(deleteLikingCommentNotification, [
+          new Date(Date.now() - 600_000),
+          getFirstLine(rows[0].contents),
+          rows[0].user_id,
+          userId,
+        ])
+        .catch((err) => console.error(err))
+    }
+
+    return { id, isLiked, likedCount: rows2[0].liked_count } as Comment
   },
 
   createComment: async (_, { postId, contents, commentId }, { userId }) => {
@@ -63,22 +68,26 @@ export const Mutation: MutationResolvers<ApolloContext> = {
       pool
         .query(getUserIdOfParentComment, [commentId])
         .then(({ rows }) => {
-          return poolQuery(createNewSubcommentNotification, [
-            getFirstLine(contents),
-            rows[0].user_id,
-            userId,
-          ])
+          if (userId !== rows[0].user_id) {
+            poolQuery(createNewSubcommentNotification, [
+              getFirstLine(contents),
+              rows[0].user_id,
+              userId,
+            ])
+          }
         })
         .catch((err) => console.error(err))
     } else {
       pool
         .query(getUserIdOfPost, [postId])
         .then(({ rows }) => {
-          return poolQuery(createNewCommentNotification, [
-            getFirstLine(contents),
-            rows[0].user_id,
-            userId,
-          ])
+          if (userId !== rows[0].user_id) {
+            poolQuery(createNewCommentNotification, [
+              getFirstLine(contents),
+              rows[0].user_id,
+              userId,
+            ])
+          }
         })
         .catch((err) => console.error(err))
     }
