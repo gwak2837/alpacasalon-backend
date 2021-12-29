@@ -92,6 +92,7 @@ export type Mutation = {
   joinGroup?: Maybe<Scalars['Boolean']>
   /** 로그아웃 성공 여부 반환 */
   logout: Scalars['Boolean']
+  readNotifications?: Maybe<Scalars['NonNegativeInt']>
   toggleLikingComment?: Maybe<Comment>
   /** 회원탈퇴 시 사용자 정보가 모두 초기화됩니다 */
   unregister?: Maybe<User>
@@ -134,6 +135,10 @@ export type MutationDeletePostArgs = {
 
 export type MutationJoinGroupArgs = {
   id?: InputMaybe<Scalars['ID']>
+}
+
+export type MutationReadNotificationsArgs = {
+  ids: Array<Scalars['ID']>
 }
 
 export type MutationToggleLikingCommentArgs = {
@@ -615,6 +620,12 @@ export type MutationResolvers<
     RequireFields<MutationJoinGroupArgs, never>
   >
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  readNotifications?: Resolver<
+    Maybe<ResolversTypes['NonNegativeInt']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationReadNotificationsArgs, 'ids'>
+  >
   toggleLikingComment?: Resolver<
     Maybe<ResolversTypes['Comment']>,
     ParentType,

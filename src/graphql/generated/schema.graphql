@@ -87,6 +87,7 @@ type Mutation {
   로그아웃 성공 여부 반환
   """
   logout: Boolean!
+  readNotifications(ids: [ID!]!): NonNegativeInt
   toggleLikingComment(id: ID!): Comment
 
   """

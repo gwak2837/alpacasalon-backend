@@ -318,13 +318,7 @@ DELETE FROM user_x_liked_comment
 WHERE user_x_liked_comment.user_id = toggle_liking_comment.user_id
   AND user_x_liked_comment.comment_id = toggle_liking_comment.comment_id;
 
-SELECT COUNT(user_x_liked_comment.user_id) INTO liked_count
-FROM user_x_liked_comment
-WHERE user_x_liked_comment.comment_id = toggle_liking_comment.comment_id;
-
 result = FALSE;
-
-RETURN;
 
 ELSE
 INSERT INTO user_x_liked_comment (user_id, comment_id)
@@ -333,15 +327,13 @@ VALUES (
     toggle_liking_comment.comment_id
   );
 
+result = TRUE;
+
+END IF;
+
 SELECT COUNT(user_x_liked_comment.user_id) INTO liked_count
 FROM user_x_liked_comment
 WHERE user_x_liked_comment.comment_id = toggle_liking_comment.comment_id;
-
-result = TRUE;
-
-RETURN;
-
-END IF;
 
 END $$;
 
