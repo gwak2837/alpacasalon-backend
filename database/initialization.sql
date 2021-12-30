@@ -337,6 +337,35 @@ WHERE user_x_liked_comment.comment_id = toggle_liking_comment.comment_id;
 
 END $$;
 
+CREATE FUNCTION toggle_joining_group (
+  user_id uuid,
+  group_id bigint,
+  out result boolean
+) LANGUAGE plpgsql AS $$ BEGIN PERFORM
+FROM user_x_group
+WHERE user_x_group.user_id = toggle_joining_group.user_id
+  AND user_x_group.group_id = toggle_joining_group.group_id;
+
+IF FOUND THEN
+DELETE FROM user_x_group
+WHERE user_x_group.user_id = toggle_joining_group.user_id
+  AND user_x_group.group_id = toggle_joining_group.group_id;
+
+result = FALSE;
+
+ELSE
+INSERT INTO user_x_group (user_id, group_id)
+VALUES (
+    toggle_joining_group.user_id,
+    toggle_joining_group.group_id
+  );
+
+result = TRUE;
+
+END IF;
+
+END $$;
+
 CREATE FUNCTION search_post (keywords text []) RETURNS TABLE (id bigint) LANGUAGE plpgsql STABLE AS $$ BEGIN RETURN QUERY
 SELECT post.id
 FROM post
