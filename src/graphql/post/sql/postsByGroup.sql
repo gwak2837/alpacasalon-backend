@@ -10,9 +10,7 @@ SELECT post.id,
 FROM post
   JOIN "user" ON "user".id = post.user_id
   LEFT JOIN "comment" ON "comment".post_id = post.id
-WHERE post.creation_time > $1
+WHERE post.group_id = $1
 GROUP BY post.id,
   "user".id
-ORDER BY comment_count DESC,
-  creation_time DESC
-FETCH FIRST 3 ROWS ONLY
+ORDER BY id DESC

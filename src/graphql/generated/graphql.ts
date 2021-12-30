@@ -256,6 +256,12 @@ export type PostModificationInput = {
   title?: InputMaybe<Scalars['String']>
 }
 
+export type PostsByGroupResult = {
+  __typename?: 'PostsByGroupResult'
+  isJoined: Scalars['Boolean']
+  posts: Array<Post>
+}
+
 export type Query = {
   __typename?: 'Query'
   /** 특정 게시글에 달린 댓글 */
@@ -277,7 +283,7 @@ export type Query = {
   post?: Maybe<Post>
   /** 글 목록 */
   posts?: Maybe<Array<Post>>
-  postsByGroup?: Maybe<Array<Post>>
+  postsByGroup?: Maybe<PostsByGroupResult>
   recommendationGroups?: Maybe<Array<Group>>
   /** 글 검색 */
   searchPosts?: Maybe<Array<Post>>
@@ -299,6 +305,10 @@ export type QueryPostArgs = {
 
 export type QueryPostsArgs = {
   pagination: Pagination
+}
+
+export type QueryPostsByGroupArgs = {
+  groupId: Scalars['ID']
 }
 
 export type QuerySearchPostsArgs = {
@@ -456,6 +466,7 @@ export type ResolversTypes = {
   Post: ResolverTypeWrapper<Post>
   PostCreationInput: PostCreationInput
   PostModificationInput: PostModificationInput
+  PostsByGroupResult: ResolverTypeWrapper<PostsByGroupResult>
   Query: ResolverTypeWrapper<{}>
   Status: Status
   String: ResolverTypeWrapper<Scalars['String']>
@@ -494,6 +505,7 @@ export type ResolversParentTypes = {
   Post: Post
   PostCreationInput: PostCreationInput
   PostModificationInput: PostModificationInput
+  PostsByGroupResult: PostsByGroupResult
   Query: {}
   String: Scalars['String']
   URL: Scalars['URL']
@@ -746,6 +758,15 @@ export type PostResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type PostsByGroupResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PostsByGroupResult'] = ResolversParentTypes['PostsByGroupResult']
+> = {
+  isJoined?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
@@ -781,7 +802,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryPostsArgs, 'pagination'>
   >
-  postsByGroup?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>
+  postsByGroup?: Resolver<
+    Maybe<ResolversTypes['PostsByGroupResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryPostsByGroupArgs, 'groupId'>
+  >
   recommendationGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>
   searchPosts?: Resolver<
     Maybe<Array<ResolversTypes['Post']>>,
@@ -843,6 +869,7 @@ export type Resolvers<ContextType = any> = {
   PollSelection?: PollSelectionResolvers<ContextType>
   PositiveInt?: GraphQLScalarType
   Post?: PostResolvers<ContextType>
+  PostsByGroupResult?: PostsByGroupResultResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   URL?: GraphQLScalarType
   UUID?: GraphQLScalarType

@@ -210,6 +210,11 @@ input PostModificationInput {
   title: String
 }
 
+type PostsByGroupResult {
+  isJoined: Boolean!
+  posts: [Post!]!
+}
+
 type Query {
   """
   특정 게시글에 달린 댓글
@@ -253,7 +258,7 @@ type Query {
   글 목록
   """
   posts(pagination: Pagination!): [Post!]
-  postsByGroup: [Post!]
+  postsByGroup(groupId: ID!): PostsByGroupResult
   recommendationGroups: [Group!]
 
   """

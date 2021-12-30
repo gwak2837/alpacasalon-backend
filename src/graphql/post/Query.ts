@@ -6,9 +6,10 @@ import { buildSelect } from '../../utils/sql'
 import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
 import { postORM } from './ORM'
-import famousPosts from './sql/famousPosts.sql'
+import isJoinedGroup from './sql/isJoinedGroup.sql'
 import post from './sql/post.sql'
 import posts from './sql/posts.sql'
+import postsByGroup from './sql/postsByGroup.sql'
 import searchPosts from './sql/searchPosts.sql'
 
 export const Query: QueryResolvers<ApolloContext> = {
@@ -16,6 +17,7 @@ export const Query: QueryResolvers<ApolloContext> = {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     const { rows } = await poolQuery(post, [id])
+
     return graphqlRelationMapping(rows[0], 'post')
   },
 
@@ -36,11 +38,28 @@ export const Query: QueryResolvers<ApolloContext> = {
 
   searchPosts: async (_, { keywords }) => {
     const { rows } = await poolQuery(searchPosts, [keywords])
-    return rows.map((row) => graphqlRelationMapping(row, 'post'))
+
+    return rows.map((row) => postORM(row))
   },
 
-  famousPosts: async () => {
-    const { rows } = await poolQuery(famousPosts, [new Date(2021, 10, 1)])
-    return rows.map((row) => graphqlRelationMapping(row, 'post'))
+  postsByGroup: async (_, { groupId }, { userId }) => {
+    if (userId) {
+      const [{ rowCount }, { rows }] = await Promise.all([
+        poolQuery(isJoinedGroup, [userId, groupId]),
+        poolQuery(postsByGroup, [groupId]),
+      ])
+
+      return {
+        isJoined: rowCount === 1,
+        posts: rows.map((row) => postORM(row)),
+      }
+    } else {
+      const { rows } = await poolQuery(postsByGroup, [groupId])
+
+      return {
+        isJoined: false,
+        posts: rows.map((row) => postORM(row)),
+      }
+    }
   },
 }
