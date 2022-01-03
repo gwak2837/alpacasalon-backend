@@ -68,6 +68,35 @@ CREATE TABLE post (
   SET NULL
 );
 
+CREATE TABLE zoom (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  creation_time timestamptz DEFAULT CURRENT_TIMESTAMP,
+  modification_time timestamptz DEFAULT CURRENT_TIMESTAMP,
+  title varchar(100) NOT NULL,
+  description varchar(200) NOT NULL,
+  image_url text NOT NULL,
+  when_where text NOT NULL,
+  when_what text NOT NULL
+);
+
+CREATE TABLE zoom_review (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  creation_time timestamptz DEFAULT CURRENT_TIMESTAMP,
+  modification_time timestamptz DEFAULT CURRENT_TIMESTAMP,
+  title varchar(100) NOT NULL,
+  contents text NOT NULL,
+  --
+  zoom_id bigint NOT NULL REFERENCES zoom ON DELETE CASCADE
+);
+
+CREATE TABLE user_x_zoom_review (
+  user_id uuid REFERENCES "user" ON DELETE CASCADE,
+  zoom_review_id bigint REFERENCES zoom_review ON DELETE CASCADE,
+  creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY (user_id, zoom_review_id)
+);
+
 CREATE TABLE notification (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
