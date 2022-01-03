@@ -7,6 +7,7 @@ import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
 import { postORM } from './ORM'
 import isJoinedGroup from './sql/isJoinedGroup.sql'
+import myPosts from './sql/myPosts.sql'
 import post from './sql/post.sql'
 import posts from './sql/posts.sql'
 import postsByGroup from './sql/postsByGroup.sql'
@@ -61,5 +62,11 @@ export const Query: QueryResolvers<ApolloContext> = {
         posts: rows.map((row) => postORM(row)),
       }
     }
+  },
+
+  myPosts: async (_, __, { userId }) => {
+    const { rows } = await poolQuery(myPosts, [userId])
+
+    return rows.map((row) => postORM(row))
   },
 }

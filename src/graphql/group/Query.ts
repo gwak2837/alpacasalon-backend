@@ -4,6 +4,7 @@ import type { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
 import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
+import group from './sql/group.sql'
 import myGroups from './sql/myGroups.sql'
 import recommandationGroups from './sql/recommandationGroups.sql'
 
@@ -20,5 +21,11 @@ export const Query: QueryResolvers<ApolloContext> = {
     const { rows } = await poolQuery(recommandationGroups)
 
     return rows.map((row) => graphqlRelationMapping(row, 'group'))
+  },
+
+  group: async (_, { id }) => {
+    const { rows } = await poolQuery(group, [id])
+
+    return graphqlRelationMapping(rows[0], 'group')
   },
 }

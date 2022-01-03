@@ -12,6 +12,8 @@ type Query {
   famousPosts: [Post!]
 
   postsByGroup(groupId: ID!): PostsByGroupResult
+
+  myPosts: [Post!]
 }
 
 type PostsByGroupResult {

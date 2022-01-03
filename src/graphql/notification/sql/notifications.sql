@@ -8,3 +8,4 @@ SELECT notification.id,
 FROM notification
   LEFT JOIN "user" ON "user".id = notification.sender_id
 WHERE receiver_id = $1
+ORDER BY notification.id DESC

@@ -3,7 +3,7 @@ import { AuthenticationError, UserInputError } from 'apollo-server-express'
 import { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
 import { graphqlRelationMapping } from '../common/ORM'
-import { QueryResolvers } from '../generated/graphql'
+import { QueryResolvers, User } from '../generated/graphql'
 import isNicknameUnique from './sql/isNicknameUnique.sql'
 import me from './sql/me.sql'
 import userByNickname from './sql/userByNickname.sql'
@@ -13,8 +13,13 @@ export const Query: QueryResolvers<ApolloContext> = {
     if (!userId) throw new AuthenticationError('로그인되어 있지 않습니다. 로그인 후 시도해주세요.')
 
     const { rows } = await poolQuery(me, [userId])
+    console.log('👀 - rows', rows)
 
-    return graphqlRelationMapping(rows[0], 'user')
+    return {
+      id: rows[0].id,
+      nickname: rows[0].nickname,
+      hasNewNotifications: rows[0].unread_notification_count > 0,
+    } as User
   },
 
   isNicknameUnique: async (_, { nickname }) => {

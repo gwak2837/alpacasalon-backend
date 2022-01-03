@@ -198,7 +198,7 @@ type Post {
 
 input PostCreationInput {
   contents: NonEmptyString!
-  groupId: ID!
+  groupId: ID
   imageUrls: [URL!]
   title: NonEmptyString!
 }
@@ -225,6 +225,7 @@ type Query {
   이번 달 핫한 이야기
   """
   famousPosts: [Post!]
+  group(id: ID!): Group
 
   """
   사용자 닉네임 중복 여부 검사
@@ -246,6 +247,7 @@ type Query {
   """
   myComments: [Comment!]
   myGroups: [Group!]
+  myPosts: [Post!]
   notifications: [Notification!]
   participatingPolls: [Poll!]
 
@@ -289,6 +291,7 @@ type User {
   creationTime: DateTime!
   email: EmailAddress!
   gender: Gender!
+  hasNewNotifications: Boolean!
   id: UUID!
   imageUrl: URL
   likedCount: NonNegativeInt!

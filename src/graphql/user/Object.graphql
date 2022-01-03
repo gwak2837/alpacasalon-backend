@@ -6,6 +6,7 @@ type User {
   birthyear: Int!
   birthday: NonEmptyString!
   gender: Gender!
+  hasNewNotifications: Boolean!
 
   # nullable
   bio: NonEmptyString

@@ -244,7 +244,7 @@ export type Post = {
 
 export type PostCreationInput = {
   contents: Scalars['NonEmptyString']
-  groupId: Scalars['ID']
+  groupId?: InputMaybe<Scalars['ID']>
   imageUrls?: InputMaybe<Array<Scalars['URL']>>
   title: Scalars['NonEmptyString']
 }
@@ -268,6 +268,7 @@ export type Query = {
   commentsByPost?: Maybe<Array<Comment>>
   /** 이번 달 핫한 이야기 */
   famousPosts?: Maybe<Array<Post>>
+  group?: Maybe<Group>
   /** 사용자 닉네임 중복 여부 검사 */
   isNicknameUnique: Scalars['Boolean']
   /** 좋아요 누른 댓글 */
@@ -277,6 +278,7 @@ export type Query = {
   /** 내가 쓴 댓글 */
   myComments?: Maybe<Array<Comment>>
   myGroups?: Maybe<Array<Group>>
+  myPosts?: Maybe<Array<Post>>
   notifications?: Maybe<Array<Notification>>
   participatingPolls?: Maybe<Array<Poll>>
   /** 글 상세 */
@@ -293,6 +295,10 @@ export type Query = {
 
 export type QueryCommentsByPostArgs = {
   postId: Scalars['ID']
+}
+
+export type QueryGroupArgs = {
+  id: Scalars['ID']
 }
 
 export type QueryIsNicknameUniqueArgs = {
@@ -333,6 +339,7 @@ export type User = {
   creationTime: Scalars['DateTime']
   email: Scalars['EmailAddress']
   gender: Gender
+  hasNewNotifications: Scalars['Boolean']
   id: Scalars['UUID']
   imageUrl?: Maybe<Scalars['URL']>
   likedCount: Scalars['NonNegativeInt']
@@ -778,6 +785,12 @@ export type QueryResolvers<
     RequireFields<QueryCommentsByPostArgs, 'postId'>
   >
   famousPosts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>
+  group?: Resolver<
+    Maybe<ResolversTypes['Group']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryGroupArgs, 'id'>
+  >
   isNicknameUnique?: Resolver<
     ResolversTypes['Boolean'],
     ParentType,
@@ -788,6 +801,7 @@ export type QueryResolvers<
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   myComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>
   myGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>
+  myPosts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>
   notifications?: Resolver<Maybe<Array<ResolversTypes['Notification']>>, ParentType, ContextType>
   participatingPolls?: Resolver<Maybe<Array<ResolversTypes['Poll']>>, ParentType, ContextType>
   post?: Resolver<
@@ -841,6 +855,7 @@ export type UserResolvers<
   creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>
   gender?: Resolver<ResolversTypes['Gender'], ParentType, ContextType>
+  hasNewNotifications?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['URL']>, ParentType, ContextType>
   likedCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>

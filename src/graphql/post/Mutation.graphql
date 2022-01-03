@@ -7,10 +7,10 @@ type Mutation {
 }
 
 input PostCreationInput {
-  groupId: ID!
   title: NonEmptyString!
   contents: NonEmptyString!
   imageUrls: [URL!]
+  groupId: ID
 }
 
 input PostModificationInput {
