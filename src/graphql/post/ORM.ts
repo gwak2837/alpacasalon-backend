@@ -17,6 +17,7 @@ export function postORM(row: Record<string, any>) {
     user: {
       id: row.user__id,
       nickname: row.user__nickname,
+      imageUrl: row.user__image_url,
     },
     group: {
       id: row.group__id,

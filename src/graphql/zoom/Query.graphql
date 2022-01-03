@@ -1,0 +1,12 @@
+type Query {
+  "글 상세"
+  zoom(id: ID!): Zoom
+
+  "글 목록"
+  zooms(pagination: Pagination!): [Zoom!]
+
+  "글 검색"
+  searchZooms(keywords: [NonEmptyString!]!): [Zoom!]
+
+  myZooms: [Zoom!]
+}

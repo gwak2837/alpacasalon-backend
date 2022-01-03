@@ -8,6 +8,9 @@ type Group {
   # nullable
   description: NonEmptyString
   imageUrl: URL
+
+  # from other table
+  newMember: User
 }
 
 enum Gender {

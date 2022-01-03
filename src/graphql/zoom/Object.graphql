@@ -1,0 +1,5 @@
+type Zoom {
+  id: ID!
+  creationTime: DateTime!
+  modificationTime: DateTime!
+}

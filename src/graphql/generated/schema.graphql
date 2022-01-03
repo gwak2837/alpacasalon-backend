@@ -50,6 +50,7 @@ type Group {
   memberCount: NonNegativeInt!
   modificationTime: DateTime!
   name: NonEmptyString!
+  newMember: User
 }
 
 input GroupCreationInput {

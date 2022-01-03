@@ -2,7 +2,6 @@ import { AuthenticationError, UserInputError } from 'apollo-server-errors'
 
 import type { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
-import { graphqlRelationMapping } from '../common/ORM'
 import { Group, MutationResolvers } from '../generated/graphql'
 import createGroup from './sql/createGroup.sql'
 import joinGroup from './sql/joinGroup.sql'
@@ -18,7 +17,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
       input.imageUrl.href,
     ])
 
-    return graphqlRelationMapping(rows[0], 'group')
+    return { id: rows[0].group_id } as Group
   },
 
   joinGroup: async (_, { id }, { userId }) => {

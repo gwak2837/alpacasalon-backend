@@ -24,7 +24,7 @@ export const Query: QueryResolvers<ApolloContext> = {
   },
 
   group: async (_, { id }) => {
-    const { rows } = await poolQuery(group, [id])
+    const { rows } = await poolQuery(group, [id, new Date(Date.now() - 3 * 86_400_000)])
 
     return graphqlRelationMapping(rows[0], 'group')
   },
