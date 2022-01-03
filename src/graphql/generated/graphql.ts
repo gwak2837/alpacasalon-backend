@@ -280,6 +280,7 @@ export type Query = {
   myComments?: Maybe<Array<Comment>>
   myGroups?: Maybe<Array<Group>>
   myPosts?: Maybe<Array<Post>>
+  myZooms?: Maybe<Array<Zoom>>
   notifications?: Maybe<Array<Notification>>
   participatingPolls?: Maybe<Array<Poll>>
   /** 글 상세 */
@@ -290,8 +291,14 @@ export type Query = {
   recommendationGroups?: Maybe<Array<Group>>
   /** 글 검색 */
   searchPosts?: Maybe<Array<Post>>
+  /** 글 검색 */
+  searchZooms?: Maybe<Array<Zoom>>
   /** 닉네임으로 사용자 검색 */
   userByNickname?: Maybe<User>
+  /** 글 상세 */
+  zoom?: Maybe<Zoom>
+  /** 글 목록 */
+  zooms?: Maybe<Array<Zoom>>
 }
 
 export type QueryCommentsByPostArgs = {
@@ -322,8 +329,20 @@ export type QuerySearchPostsArgs = {
   keywords: Array<Scalars['NonEmptyString']>
 }
 
+export type QuerySearchZoomsArgs = {
+  keywords: Array<Scalars['NonEmptyString']>
+}
+
 export type QueryUserByNicknameArgs = {
   nickname: Scalars['NonEmptyString']
+}
+
+export type QueryZoomArgs = {
+  id: Scalars['ID']
+}
+
+export type QueryZoomsArgs = {
+  pagination: Pagination
 }
 
 export enum Status {
@@ -358,6 +377,13 @@ export type UserModificationInput = {
   imageUrl?: InputMaybe<Scalars['URL']>
   nickname?: InputMaybe<Scalars['NonEmptyString']>
   phoneNumber?: InputMaybe<Scalars['NonEmptyString']>
+}
+
+export type Zoom = {
+  __typename?: 'Zoom'
+  creationTime: Scalars['DateTime']
+  id: Scalars['ID']
+  modificationTime: Scalars['DateTime']
 }
 
 export type ResolverTypeWrapper<T> = Promise<T> | T
@@ -482,6 +508,7 @@ export type ResolversTypes = {
   UUID: ResolverTypeWrapper<Scalars['UUID']>
   User: ResolverTypeWrapper<User>
   UserModificationInput: UserModificationInput
+  Zoom: ResolverTypeWrapper<Zoom>
 }
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -520,6 +547,7 @@ export type ResolversParentTypes = {
   UUID: Scalars['UUID']
   User: User
   UserModificationInput: UserModificationInput
+  Zoom: Zoom
 }
 
 export type CommentResolvers<
@@ -804,6 +832,7 @@ export type QueryResolvers<
   myComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>
   myGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>
   myPosts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>
+  myZooms?: Resolver<Maybe<Array<ResolversTypes['Zoom']>>, ParentType, ContextType>
   notifications?: Resolver<Maybe<Array<ResolversTypes['Notification']>>, ParentType, ContextType>
   participatingPolls?: Resolver<Maybe<Array<ResolversTypes['Poll']>>, ParentType, ContextType>
   post?: Resolver<
@@ -831,11 +860,29 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QuerySearchPostsArgs, 'keywords'>
   >
+  searchZooms?: Resolver<
+    Maybe<Array<ResolversTypes['Zoom']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QuerySearchZoomsArgs, 'keywords'>
+  >
   userByNickname?: Resolver<
     Maybe<ResolversTypes['User']>,
     ParentType,
     ContextType,
     RequireFields<QueryUserByNicknameArgs, 'nickname'>
+  >
+  zoom?: Resolver<
+    Maybe<ResolversTypes['Zoom']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomArgs, 'id'>
+  >
+  zooms?: Resolver<
+    Maybe<Array<ResolversTypes['Zoom']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomsArgs, 'pagination'>
   >
 }
 
@@ -867,6 +914,16 @@ export type UserResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type ZoomResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Zoom'] = ResolversParentTypes['Zoom']
+> = {
+  creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type Resolvers<ContextType = any> = {
   Comment?: CommentResolvers<ContextType>
   Date?: GraphQLScalarType
@@ -891,4 +948,5 @@ export type Resolvers<ContextType = any> = {
   URL?: GraphQLScalarType
   UUID?: GraphQLScalarType
   User?: UserResolvers<ContextType>
+  Zoom?: ZoomResolvers<ContextType>
 }

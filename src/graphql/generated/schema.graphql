@@ -249,6 +249,7 @@ type Query {
   myComments: [Comment!]
   myGroups: [Group!]
   myPosts: [Post!]
+  myZooms: [Zoom!]
   notifications: [Notification!]
   participatingPolls: [Poll!]
 
@@ -270,9 +271,24 @@ type Query {
   searchPosts(keywords: [NonEmptyString!]!): [Post!]
 
   """
+  글 검색
+  """
+  searchZooms(keywords: [NonEmptyString!]!): [Zoom!]
+
+  """
   닉네임으로 사용자 검색
   """
   userByNickname(nickname: NonEmptyString!): User
+
+  """
+  글 상세
+  """
+  zoom(id: ID!): Zoom
+
+  """
+  글 목록
+  """
+  zooms(pagination: Pagination!): [Zoom!]
 }
 
 enum Status {
@@ -310,4 +326,10 @@ input UserModificationInput {
   imageUrl: URL
   nickname: NonEmptyString
   phoneNumber: NonEmptyString
+}
+
+type Zoom {
+  creationTime: DateTime!
+  id: ID!
+  modificationTime: DateTime!
 }
