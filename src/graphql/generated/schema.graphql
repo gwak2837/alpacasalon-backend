@@ -47,6 +47,7 @@ type Group {
   description: NonEmptyString
   id: ID!
   imageUrl: URL
+  isJoined: Boolean!
   memberCount: NonNegativeInt!
   modificationTime: DateTime!
   name: NonEmptyString!
