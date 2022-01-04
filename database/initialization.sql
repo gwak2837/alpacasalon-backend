@@ -291,7 +291,7 @@ CREATE FUNCTION create_group(
   out group_id bigint
 ) LANGUAGE plpgsql AS $$ BEGIN
 INSERT INTO "group" (name, description, image_url)
-VALUES ($1, $2, $3)
+VALUES (name, description, image_url)
 RETURNING id INTO group_id;
 
 INSERT INTO user_x_group(user_id, group_id)

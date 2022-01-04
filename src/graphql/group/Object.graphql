@@ -11,6 +11,8 @@ type Group {
 
   # from other table
   newMember: User
+
+  isJoined: Boolean!
 }
 
 enum Gender {
