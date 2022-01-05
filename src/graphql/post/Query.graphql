@@ -11,12 +11,7 @@ type Query {
   "이번 달 핫한 이야기"
   famousPosts: [Post!]
 
-  postsByGroup(groupId: ID!): PostsByGroupResult
+  postsByGroup(groupId: ID!): [Post!]
 
   myPosts: [Post!]
-}
-
-type PostsByGroupResult {
-  isJoined: Boolean!
-  posts: [Post!]!
 }

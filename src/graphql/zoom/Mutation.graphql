@@ -1,0 +1,22 @@
+type Mutation {
+  createZoom(input: ZoomCreationInput!): Zoom
+
+  updateZoom(input: ZoomModificationInput!): Zoom
+
+  deleteZoom(id: ID!): Zoom
+
+  joinZoom(id: ID!): Zoom
+}
+
+input ZoomCreationInput {
+  title: NonEmptyString!
+  description: NonEmptyString!
+  imageUrl: URL
+}
+
+input ZoomModificationInput {
+  id: ID!
+  title: NonEmptyString
+  contents: NonEmptyString
+  imageUrl: URL
+}

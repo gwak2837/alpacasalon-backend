@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-errors'
+import { AuthenticationError, UserInputError } from 'apollo-server-errors'
 
 import type { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
@@ -6,7 +6,6 @@ import { buildSelect } from '../../utils/sql'
 import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
 import { postORM } from './ORM'
-import isJoinedGroup from './sql/isJoinedGroup.sql'
 import myPosts from './sql/myPosts.sql'
 import post from './sql/post.sql'
 import posts from './sql/posts.sql'
@@ -17,7 +16,9 @@ export const Query: QueryResolvers<ApolloContext> = {
   post: async (_, { id }, { userId }) => {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
-    const { rows } = await poolQuery(post, [id])
+    const { rowCount, rows } = await poolQuery(post, [id])
+
+    if (rowCount === 0) throw new UserInputError(`id:${id} 의 글을 찾을 수 없습니다.`)
 
     return graphqlRelationMapping(rows[0], 'post')
   },
@@ -44,24 +45,11 @@ export const Query: QueryResolvers<ApolloContext> = {
   },
 
   postsByGroup: async (_, { groupId }, { userId }) => {
-    if (userId) {
-      const [{ rowCount }, { rows }] = await Promise.all([
-        poolQuery(isJoinedGroup, [userId, groupId]),
-        poolQuery(postsByGroup, [groupId]),
-      ])
+    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
-      return {
-        isJoined: rowCount === 1,
-        posts: rows.map((row) => postORM(row)),
-      }
-    } else {
-      const { rows } = await poolQuery(postsByGroup, [groupId])
+    const { rows } = await poolQuery(postsByGroup, [groupId])
 
-      return {
-        isJoined: false,
-        posts: rows.map((row) => postORM(row)),
-      }
-    }
+    return rows.map((row) => postORM(row))
   },
 
   myPosts: async (_, __, { userId }) => {

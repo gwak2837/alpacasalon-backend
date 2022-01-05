@@ -15,7 +15,7 @@ input PostCreationInput {
 
 input PostModificationInput {
   id: ID!
-  title: String
-  contents: String
+  title: NonEmptyString
+  contents: NonEmptyString
   imageUrls: [URL!]
 }

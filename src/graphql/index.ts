@@ -5,6 +5,7 @@ import * as commentObjectResolver from './comment/Object'
 import * as commentQueryResolver from './comment/Query'
 import * as commonResolver from './common/common'
 import * as groupMutationResolver from './group/Mutation'
+import * as groupObjectResolver from './group/Object'
 import * as groupQueryResolver from './group/Query'
 import * as notificationMutationResolver from './notification/Mutation'
 import * as notificationObjectResolver from './notification/Object'
@@ -15,6 +16,9 @@ import * as postQueryResolver from './post/Query'
 import * as userMutationResolver from './user/Mutation'
 import * as userObjectResolver from './user/Object'
 import * as userQueryResolver from './user/Query'
+import * as zoomMutationResolver from './zoom/Mutation'
+import * as zoomObjectResolver from './zoom/Object'
+import * as zoomQueryResolver from './zoom/Query'
 
 const resolversArray = [
   commentMutationResolver,
@@ -22,6 +26,7 @@ const resolversArray = [
   commentQueryResolver,
   commonResolver,
   groupMutationResolver,
+  groupObjectResolver,
   groupQueryResolver,
   notificationMutationResolver,
   notificationObjectResolver,
@@ -32,6 +37,9 @@ const resolversArray = [
   userMutationResolver,
   userObjectResolver,
   userQueryResolver,
+  // zoomMutationResolver,
+  zoomObjectResolver,
+  zoomQueryResolver,
 ]
 
 export const resolvers = mergeResolvers(resolversArray)

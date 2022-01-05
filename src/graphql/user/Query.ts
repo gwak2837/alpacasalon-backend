@@ -13,7 +13,6 @@ export const Query: QueryResolvers<ApolloContext> = {
     if (!userId) throw new AuthenticationError('로그인되어 있지 않습니다. 로그인 후 시도해주세요.')
 
     const { rows } = await poolQuery(me, [userId])
-    console.log('👀 - rows', rows)
 
     return {
       id: rows[0].id,

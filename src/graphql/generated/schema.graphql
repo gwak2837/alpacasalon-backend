@@ -51,7 +51,7 @@ type Group {
   memberCount: NonNegativeInt!
   modificationTime: DateTime!
   name: NonEmptyString!
-  newMember: User
+  newMembers: [User!]
 }
 
 input GroupCreationInput {
@@ -80,10 +80,13 @@ type Mutation {
   createGroup(input: GroupCreationInput!): Group
   createPoll(input: PollCreationInput!): Poll
   createPost(input: PostCreationInput!): Post
+  createZoom(input: ZoomCreationInput!): Zoom
   deleteComment(id: ID!): Comment
   deleteGroup(id: ID!): Group
   deletePost(id: ID!): Post
+  deleteZoom(id: ID!): Zoom
   joinGroup(id: ID): Boolean
+  joinZoom(id: ID!): Zoom
 
   """
   로그아웃 성공 여부 반환
@@ -104,6 +107,7 @@ type Mutation {
   사용자 정보를 수정합니다
   """
   updateUser(input: UserModificationInput!): User
+  updateZoom(input: ZoomModificationInput!): Zoom
 }
 
 scalar NonEmptyString
@@ -206,15 +210,10 @@ input PostCreationInput {
 }
 
 input PostModificationInput {
-  contents: String
+  contents: NonEmptyString
   id: ID!
   imageUrls: [URL!]
-  title: String
-}
-
-type PostsByGroupResult {
-  isJoined: Boolean!
-  posts: [Post!]!
+  title: NonEmptyString
 }
 
 type Query {
@@ -263,7 +262,7 @@ type Query {
   글 목록
   """
   posts(pagination: Pagination!): [Post!]
-  postsByGroup(groupId: ID!): PostsByGroupResult
+  postsByGroup(groupId: ID!): [Post!]
   recommendationGroups: [Group!]
 
   """
@@ -290,6 +289,15 @@ type Query {
   글 목록
   """
   zooms(pagination: Pagination!): [Zoom!]
+}
+
+type Review {
+  contents: NonEmptyString
+  creationTime: DateTime!
+  id: ID!
+  modificationTime: DateTime!
+  title: NonEmptyString
+  writer: User
 }
 
 enum Status {
@@ -331,6 +339,26 @@ input UserModificationInput {
 
 type Zoom {
   creationTime: DateTime!
+  description: NonEmptyString!
   id: ID!
+  imageUrl: URL
+  isJoined: Boolean!
   modificationTime: DateTime!
+  tags: [NonEmptyString!]
+  title: NonEmptyString!
+  whenWhat: [NonEmptyString!]!
+  whenWhere: NonEmptyString!
+}
+
+input ZoomCreationInput {
+  description: NonEmptyString!
+  imageUrl: URL
+  title: NonEmptyString!
+}
+
+input ZoomModificationInput {
+  contents: NonEmptyString
+  id: ID!
+  imageUrl: URL
+  title: NonEmptyString
 }
