@@ -1,4 +1,4 @@
-import { AuthenticationError, UserInputError } from 'apollo-server-errors'
+import { AuthenticationError } from 'apollo-server-errors'
 
 import type { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'

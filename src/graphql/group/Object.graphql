@@ -10,8 +10,7 @@ type Group {
   imageUrl: URL
 
   # from other table
-  newMember: User
-
+  newMembers: [User!]
   isJoined: Boolean!
 }
 

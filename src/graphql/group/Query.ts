@@ -4,6 +4,7 @@ import type { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
 import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
+import { groupORM } from './ORM'
 import group from './sql/group.sql'
 import myGroups from './sql/myGroups.sql'
 import recommandationGroups from './sql/recommandationGroups.sql'
@@ -23,9 +24,11 @@ export const Query: QueryResolvers<ApolloContext> = {
     return rows.map((row) => graphqlRelationMapping(row, 'group'))
   },
 
-  group: async (_, { id }) => {
-    const { rows } = await poolQuery(group, [id, new Date(Date.now() - 3 * 86_400_000)])
+  group: async (_, { id }, { userId }) => {
+    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
-    return graphqlRelationMapping(rows[0], 'group')
+    const { rows } = await poolQuery(group, [id, new Date(Date.now() - 7 * 86_400_000), userId])
+
+    return groupORM(rows)
   },
 }
