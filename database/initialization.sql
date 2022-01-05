@@ -405,6 +405,35 @@ END IF;
 
 END $$;
 
+CREATE FUNCTION toggle_joining_zoom (
+  user_id uuid,
+  zoom_id bigint,
+  out result boolean
+) LANGUAGE plpgsql AS $$ BEGIN PERFORM
+FROM user_x_joined_zoom
+WHERE user_x_joined_zoom.user_id = toggle_joining_zoom.user_id
+  AND user_x_joined_zoom.zoom_id = toggle_joining_zoom.zoom_id;
+
+IF FOUND THEN
+DELETE FROM user_x_joined_zoom
+WHERE user_x_joined_zoom.user_id = toggle_joining_zoom.user_id
+  AND user_x_joined_zoom.zoom_id = toggle_joining_zoom.zoom_id;
+
+result = FALSE;
+
+ELSE
+INSERT INTO user_x_joined_zoom (user_id, zoom_id)
+VALUES (
+    toggle_joining_zoom.user_id,
+    toggle_joining_zoom.zoom_id
+  );
+
+result = TRUE;
+
+END IF;
+
+END $$;
+
 CREATE FUNCTION search_post (keywords text []) RETURNS TABLE (id bigint) LANGUAGE plpgsql STABLE AS $$ BEGIN RETURN QUERY
 SELECT post.id
 FROM post

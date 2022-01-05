@@ -25,6 +25,6 @@ export const Mutation: MutationResolvers<ApolloContext> = {
 
     const { rows } = await poolQuery(joinGroup, [userId, id])
 
-    return rows[0].result
+    return { id, isJoined: rows[0].result } as Group
   },
 }

@@ -85,7 +85,7 @@ type Mutation {
   deleteGroup(id: ID!): Group
   deletePost(id: ID!): Post
   deleteZoom(id: ID!): Zoom
-  joinGroup(id: ID): Boolean
+  joinGroup(id: ID): Group
   joinZoom(id: ID!): Zoom
 
   """

@@ -37,7 +37,7 @@ const resolversArray = [
   userMutationResolver,
   userObjectResolver,
   userQueryResolver,
-  // zoomMutationResolver,
+  zoomMutationResolver,
   zoomObjectResolver,
   zoomQueryResolver,
 ]

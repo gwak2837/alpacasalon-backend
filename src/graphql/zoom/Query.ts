@@ -5,6 +5,7 @@ import { poolQuery } from '../../database/postgres'
 import { buildSelect } from '../../utils/sql'
 import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
+import myZooms from './sql/myZooms.sql'
 import zoom from './sql/zoom.sql'
 import zooms from './sql/zooms.sql'
 
@@ -30,6 +31,14 @@ export const Query: QueryResolvers<ApolloContext> = {
     }
 
     const { rows } = await poolQuery(sql, values)
+
+    return rows.map((row) => graphqlRelationMapping(row, 'zoom'))
+  },
+
+  myZooms: async (_, __, { userId }) => {
+    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
+
+    const { rows } = await poolQuery(myZooms, [userId])
 
     return rows.map((row) => graphqlRelationMapping(row, 'zoom'))
   },

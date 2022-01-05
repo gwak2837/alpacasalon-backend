@@ -5,7 +5,7 @@ type Mutation {
 
   deleteGroup(id: ID!): Group
 
-  joinGroup(id: ID): Boolean
+  joinGroup(id: ID): Group
 }
 
 input GroupCreationInput {

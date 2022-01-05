@@ -93,7 +93,7 @@ export type Mutation = {
   deleteGroup?: Maybe<Group>
   deletePost?: Maybe<Post>
   deleteZoom?: Maybe<Zoom>
-  joinGroup?: Maybe<Scalars['Boolean']>
+  joinGroup?: Maybe<Group>
   joinZoom?: Maybe<Zoom>
   /** 로그아웃 성공 여부 반환 */
   logout: Scalars['Boolean']
@@ -726,7 +726,7 @@ export type MutationResolvers<
     RequireFields<MutationDeleteZoomArgs, 'id'>
   >
   joinGroup?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
+    Maybe<ResolversTypes['Group']>,
     ParentType,
     ContextType,
     RequireFields<MutationJoinGroupArgs, never>
