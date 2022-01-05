@@ -76,7 +76,16 @@ CREATE TABLE zoom (
   description varchar(200) NOT NULL,
   image_url text NOT NULL,
   when_where text NOT NULL,
-  when_what text NOT NULL
+  when_what text [] NOT NULL,
+  tags varchar(20) []
+);
+
+CREATE TABLE user_x_joined_zoom (
+  user_id uuid REFERENCES "user" ON DELETE CASCADE,
+  zoom_id bigint REFERENCES zoom ON DELETE CASCADE,
+  creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY (user_id, zoom_id)
 );
 
 CREATE TABLE zoom_review (
@@ -86,10 +95,11 @@ CREATE TABLE zoom_review (
   title varchar(100) NOT NULL,
   contents text NOT NULL,
   --
-  zoom_id bigint NOT NULL REFERENCES zoom ON DELETE CASCADE
+  zoom_id bigint NOT NULL REFERENCES zoom ON DELETE CASCADE,
+  user_id uuid REFERENCES "user" ON DELETE CASCADE
 );
 
-CREATE TABLE user_x_zoom_review (
+CREATE TABLE user_x_liked_zoom_review (
   user_id uuid REFERENCES "user" ON DELETE CASCADE,
   zoom_review_id bigint REFERENCES zoom_review ON DELETE CASCADE,
   creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
