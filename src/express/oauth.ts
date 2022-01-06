@@ -18,8 +18,18 @@ function encodeGender(gender: string) {
 }
 
 function verifyTargetCustomer(user: any) {
-  // return user.gender === 'female' && new Date().getFullYear() - +user.birthyear >= 40 // 여성 & 40대 이상만 가입 가능
-  return new Date().getFullYear() - +user.birthyear >= 19 // 일단 성인만 가입 가능
+  return (
+    user.id === 1992264706 || // 제리
+    user.id === 2003890986 || // 토리
+    user.id === 1990358042 || // 또리
+    user.id === 2026354632 || // 수리
+    user.id === 2045905961 || // ?
+    user.id === 2013581948 || // 시리
+    // user.id === '' || // 아리
+    // user.id === '' || // 효리
+    (user.kakao_account.gender === 'female' &&
+      new Date().getFullYear() - +user.kakao_account.birthyear >= 40)
+  )
 }
 
 function hasRequiredInfo(user: any) {
@@ -81,7 +91,7 @@ export function setOAuthStrategies(app: Express) {
     }
 
     // 4050 여성이 아닌 경우
-    if (!verifyTargetCustomer(kakaoAccount)) {
+    if (!verifyTargetCustomer(kakaoUserInfo)) {
       return res.redirect(`${frontendUrl}/sorry`)
     }
 
