@@ -3,10 +3,10 @@ import { Comment } from '../generated/graphql'
 export function commentORM(rows: Record<string, any>[]) {
   if (rows.length === 0) return null
 
-  const comments = []
+  const comments = [] as any[]
 
   for (const row of rows) {
-    let existingComment = comments.find((comment) => comment.id === row.id)
+    const existingComment = comments.find((comment) => comment.id === row.id)
 
     if (existingComment) {
       existingComment.subcomments.push({

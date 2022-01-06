@@ -1,4 +1,4 @@
-import { AuthenticationError, UserInputError } from 'apollo-server-errors'
+import { AuthenticationError, ForbiddenError, UserInputError } from 'apollo-server-errors'
 
 import type { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
@@ -6,6 +6,7 @@ import { buildSelect } from '../../utils/sql'
 import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
 import { postORM } from './ORM'
+import doesUserJoinGroup from './sql/doesUserJoinGroup.sql'
 import myPosts from './sql/myPosts.sql'
 import post from './sql/post.sql'
 import posts from './sql/posts.sql'
@@ -17,8 +18,14 @@ export const Query: QueryResolvers<ApolloContext> = {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     const { rowCount, rows } = await poolQuery(post, [id])
-
     if (rowCount === 0) throw new UserInputError(`id:${id} 의 글을 찾을 수 없습니다.`)
+
+    const groupId = rows[0].group__id
+
+    if (groupId) {
+      const { rowCount: rowCount2 } = await poolQuery(doesUserJoinGroup, [groupId, userId])
+      if (rowCount2 === 0) throw new ForbiddenError('해당 그룹에 속해 있지 않습니다.')
+    }
 
     return graphqlRelationMapping(rows[0], 'post')
   },
