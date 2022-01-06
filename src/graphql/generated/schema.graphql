@@ -48,6 +48,7 @@ type Group {
   id: ID!
   imageUrl: URL
   isJoined: Boolean!
+  leader: User
   memberCount: NonNegativeInt!
   modificationTime: DateTime!
   name: NonEmptyString!

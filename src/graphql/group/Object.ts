@@ -8,4 +8,8 @@ export const Group: GroupResolvers = {
   newMembers: ({ newMembers }) => {
     return newMembers && newMembers.length > 0 ? newMembers : null
   },
+
+  leader: ({ leader }) => {
+    return leader?.id ? leader : null
+  },
 }

@@ -63,6 +63,7 @@ export type Group = {
   id: Scalars['ID']
   imageUrl?: Maybe<Scalars['URL']>
   isJoined: Scalars['Boolean']
+  leader?: Maybe<User>
   memberCount: Scalars['NonNegativeInt']
   modificationTime: Scalars['DateTime']
   name: Scalars['NonEmptyString']
@@ -641,6 +642,7 @@ export type GroupResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['URL']>, ParentType, ContextType>
   isJoined?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  leader?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   memberCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>
   modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>

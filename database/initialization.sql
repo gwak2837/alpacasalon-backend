@@ -43,7 +43,9 @@ CREATE TABLE "group" (
   modification_time timestamptz DEFAULT CURRENT_TIMESTAMP,
   name varchar(20) NOT NULL,
   description varchar(100),
-  image_url text
+  image_url text,
+  --
+  leader_id uuid REFERENCES "user" ON DELETE CASCADE
 );
 
 CREATE TABLE user_x_group (

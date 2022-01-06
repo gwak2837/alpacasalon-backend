@@ -10,8 +10,9 @@ type Group {
   imageUrl: URL
 
   # from other table
-  newMembers: [User!]
+  leader: User
   isJoined: Boolean!
+  newMembers: [User!]
 }
 
 enum Gender {

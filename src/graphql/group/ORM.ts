@@ -14,6 +14,10 @@ export function groupORM(rows: Record<string, any>[]) {
     imageUrl: firstRow.image_url,
     memberCount: firstRow.member_count,
     isJoined: firstRow.is_joined,
+    leader: {
+      id: firstRow.leader__id,
+      nickname: firstRow.leader__nickname,
+    },
     newMembers: [] as User[],
   }
 
