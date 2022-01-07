@@ -13,7 +13,8 @@ export const Query: QueryResolvers<ApolloContext> = {
   myGroups: async (_, __, { userId }) => {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
-    const { rows } = await poolQuery(myGroups, [userId])
+    const { rows } = await poolQuery(myGroups, [userId, new Date(Date.now() - 1 * 86_400_000)])
+    console.log('👀 - rows', rows)
 
     return rows.map((row) => graphqlRelationMapping(row, 'group'))
   },

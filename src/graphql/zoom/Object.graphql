@@ -6,6 +6,7 @@ type Zoom {
   description: NonEmptyString!
   whenWhere: NonEmptyString!
   whenWhat: [NonEmptyString!]!
+  tag: [NonEmptyString!]
 
   # nullable
   imageUrl: URL

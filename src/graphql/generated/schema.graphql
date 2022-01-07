@@ -53,6 +53,7 @@ type Group {
   modificationTime: DateTime!
   name: NonEmptyString!
   newMembers: [User!]
+  newPostCount: NonNegativeInt!
 }
 
 input GroupCreationInput {
@@ -345,6 +346,7 @@ type Zoom {
   imageUrl: URL
   isJoined: Boolean!
   modificationTime: DateTime!
+  tag: [NonEmptyString!]
   tags: [NonEmptyString!]
   title: NonEmptyString!
   whenWhat: [NonEmptyString!]!

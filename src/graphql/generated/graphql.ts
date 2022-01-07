@@ -68,6 +68,7 @@ export type Group = {
   modificationTime: Scalars['DateTime']
   name: Scalars['NonEmptyString']
   newMembers?: Maybe<Array<User>>
+  newPostCount: Scalars['NonNegativeInt']
 }
 
 export type GroupCreationInput = {
@@ -413,6 +414,7 @@ export type Zoom = {
   imageUrl?: Maybe<Scalars['URL']>
   isJoined: Scalars['Boolean']
   modificationTime: Scalars['DateTime']
+  tag?: Maybe<Array<Scalars['NonEmptyString']>>
   tags?: Maybe<Array<Scalars['NonEmptyString']>>
   title: Scalars['NonEmptyString']
   whenWhat: Array<Scalars['NonEmptyString']>
@@ -647,6 +649,7 @@ export type GroupResolvers<
   modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
   newMembers?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>
+  newPostCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -1004,6 +1007,7 @@ export type ZoomResolvers<
   imageUrl?: Resolver<Maybe<ResolversTypes['URL']>, ParentType, ContextType>
   isJoined?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  tag?: Resolver<Maybe<Array<ResolversTypes['NonEmptyString']>>, ParentType, ContextType>
   tags?: Resolver<Maybe<Array<ResolversTypes['NonEmptyString']>>, ParentType, ContextType>
   title?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
   whenWhat?: Resolver<Array<ResolversTypes['NonEmptyString']>, ParentType, ContextType>

@@ -11,6 +11,7 @@ type Group {
 
   # from other table
   leader: User
+  newPostCount: NonNegativeInt!
   isJoined: Boolean!
   newMembers: [User!]
 }
