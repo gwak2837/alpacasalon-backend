@@ -11,4 +11,4 @@ FROM "group"
   LEFT JOIN post ON post.group_id = "group".id
   AND post.creation_time > $2
 GROUP BY "group".id
-ORDER BY "group".id DESC
+ORDER BY new_post_count DESC

@@ -13,8 +13,10 @@ export const Mutation: MutationResolvers<ApolloContext> = {
   createPost: async (_, { input }, { userId }) => {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
-    const { rowCount } = await poolQuery(doesUserJoinGroup, [input.groupId, userId])
-    if (rowCount === 0) throw new ForbiddenError('해당 그룹에 속해 있지 않습니다.')
+    if (input.groupId) {
+      const { rowCount } = await poolQuery(doesUserJoinGroup, [input.groupId, userId])
+      if (rowCount === 0) throw new ForbiddenError('해당 그룹에 속해 있지 않습니다.')
+    }
 
     const imageUrls = input.imageUrls?.map((imageUrl) => imageUrl.href)
 
