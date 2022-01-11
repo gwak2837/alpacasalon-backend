@@ -35,7 +35,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
 
     const { rows } = await poolQuery(updateUser, [
       input.nickname,
-      input.imageUrl.href,
+      input.imageUrl?.href,
       input.email,
       input.phoneNumber,
       input.gender,
