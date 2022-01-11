@@ -25,8 +25,8 @@ function verifyTargetCustomer(user: any) {
     user.id === 2026354632 || // 수리
     user.id === 2045905961 || // ?
     user.id === 2013581948 || // 시리
-    // user.id === '' || // 아리
-    // user.id === '' || // 효리
+    user.id === 2064695827 || // 아리
+    user.id === 2073558438 || // 블리
     (user.kakao_account.gender === 'female' &&
       new Date().getFullYear() - +user.kakao_account.birthyear >= 40)
   )
