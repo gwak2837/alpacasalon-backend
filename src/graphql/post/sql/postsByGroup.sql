@@ -8,7 +8,7 @@ SELECT post.id,
   "user".id AS user__id,
   "user".nickname AS user__nickname
 FROM post
-  JOIN "user" ON "user".id = post.user_id
+  LEFT JOIN "user" ON "user".id = post.user_id
   LEFT JOIN "comment" ON "comment".post_id = post.id
 WHERE post.group_id = $1
 GROUP BY post.id,

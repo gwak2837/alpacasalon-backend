@@ -77,6 +77,7 @@ CREATE TABLE zoom (
   title varchar(100) NOT NULL,
   description varchar(200) NOT NULL,
   image_url text NOT NULL,
+  "when" timestamptz NOT NULL,
   when_where text NOT NULL,
   when_what text [] NOT NULL,
   tags varchar(20) []
@@ -381,7 +382,7 @@ END $$;
 CREATE FUNCTION toggle_joining_group (
   user_id uuid,
   group_id bigint,
-  out result boolean
+  out is_joined boolean
 ) LANGUAGE plpgsql AS $$ BEGIN PERFORM
 FROM user_x_group
 WHERE user_x_group.user_id = toggle_joining_group.user_id
@@ -392,7 +393,7 @@ DELETE FROM user_x_group
 WHERE user_x_group.user_id = toggle_joining_group.user_id
   AND user_x_group.group_id = toggle_joining_group.group_id;
 
-result = FALSE;
+is_joined = FALSE;
 
 ELSE
 INSERT INTO user_x_group (user_id, group_id)
@@ -401,7 +402,7 @@ VALUES (
     toggle_joining_group.group_id
   );
 
-result = TRUE;
+is_joined = TRUE;
 
 END IF;
 
