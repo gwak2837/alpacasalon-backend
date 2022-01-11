@@ -92,7 +92,7 @@ export function setOAuthStrategies(app: Express) {
 
     // 4050 여성이 아닌 경우
     if (!verifyTargetCustomer(kakaoUserInfo)) {
-      return res.redirect(`${frontendUrl}/sorry`)
+      return res.redirect(`${frontendUrl}/sorry?id=${kakaoUserInfo.id}`)
     }
 
     const findKakaoUserResult = await poolQuery(findKakaoUser, [kakaoUserInfo.id])
