@@ -287,6 +287,7 @@ type Query {
   글 상세
   """
   zoom(id: ID!): Zoom
+  zoomTitleById(id: ID!): Zoom
 
   """
   글 목록

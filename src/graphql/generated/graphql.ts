@@ -315,6 +315,7 @@ export type Query = {
   userByNickname?: Maybe<User>
   /** 글 상세 */
   zoom?: Maybe<Zoom>
+  zoomTitleById?: Maybe<Zoom>
   /** 글 목록 */
   zooms?: Maybe<Array<Zoom>>
 }
@@ -360,6 +361,10 @@ export type QueryUserByNicknameArgs = {
 }
 
 export type QueryZoomArgs = {
+  id: Scalars['ID']
+}
+
+export type QueryZoomTitleByIdArgs = {
   id: Scalars['ID']
 }
 
@@ -958,6 +963,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryZoomArgs, 'id'>
+  >
+  zoomTitleById?: Resolver<
+    Maybe<ResolversTypes['Zoom']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomTitleByIdArgs, 'id'>
   >
   zooms?: Resolver<
     Maybe<Array<ResolversTypes['Zoom']>>,
