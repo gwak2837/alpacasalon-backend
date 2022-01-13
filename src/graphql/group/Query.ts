@@ -6,6 +6,7 @@ import { graphqlRelationMapping } from '../common/ORM'
 import { Group, QueryResolvers, User } from '../generated/graphql'
 import { groupORM } from './ORM'
 import group from './sql/group.sql'
+import isGroupNameUnique from './sql/isGroupNameUnique.sql'
 import myGroups from './sql/myGroups.sql'
 import newMembers from './sql/newMembers.sql'
 import recommandationGroups from './sql/recommandationGroups.sql'
@@ -15,7 +16,6 @@ export const Query: QueryResolvers<ApolloContext> = {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     const { rows } = await poolQuery(myGroups, [userId, new Date(Date.now() - 1 * 86_400_000)])
-    console.log('👀 - rows', rows)
 
     return rows.map((row) => graphqlRelationMapping(row, 'group'))
   },
@@ -24,6 +24,12 @@ export const Query: QueryResolvers<ApolloContext> = {
     const { rows } = await poolQuery(recommandationGroups)
 
     return rows.map((row) => graphqlRelationMapping(row, 'group'))
+  },
+
+  isGroupNameUnique: async (_, { name }) => {
+    const { rowCount } = await poolQuery(isGroupNameUnique, [name])
+
+    return rowCount === 0
   },
 
   group: async (_, { id }, { userId }) => {

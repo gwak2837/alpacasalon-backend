@@ -287,6 +287,7 @@ export type Query = {
   /** 이번 달 핫한 이야기 */
   famousPosts?: Maybe<Array<Post>>
   group?: Maybe<Group>
+  isGroupNameUnique: Scalars['Boolean']
   /** 사용자 닉네임 중복 여부 검사 */
   isNicknameUnique: Scalars['Boolean']
   /** 좋아요 누른 댓글 */
@@ -324,6 +325,10 @@ export type QueryCommentsByPostArgs = {
 
 export type QueryGroupArgs = {
   id: Scalars['ID']
+}
+
+export type QueryIsGroupNameUniqueArgs = {
+  name: Scalars['NonEmptyString']
 }
 
 export type QueryIsNicknameUniqueArgs = {
@@ -890,6 +895,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryGroupArgs, 'id'>
+  >
+  isGroupNameUnique?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryIsGroupNameUniqueArgs, 'name'>
   >
   isNicknameUnique?: Resolver<
     ResolversTypes['Boolean'],
