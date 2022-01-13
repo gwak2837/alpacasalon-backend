@@ -10,5 +10,5 @@ export function zoomReviewORM(row: Record<string, any>) {
       id: row.user__id,
       nickname: row.user__nickname,
     },
-  } as unknown as Review
+  } as Review
 }
