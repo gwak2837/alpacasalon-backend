@@ -1,3 +1,3 @@
-SELECT zoom_id
+SELECT id
 FROM zoom
-WHERE zoom_id = $1
+WHERE id = $1

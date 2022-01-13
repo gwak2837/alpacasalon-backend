@@ -269,11 +269,6 @@ type Query {
   recommendationGroups: [Group!]
 
   """
-  review 목록
-  """
-  reviews(pagination: Pagination!): [Review!]
-
-  """
   글 검색
   """
   searchPosts(keywords: [NonEmptyString!]!): [Post!]
@@ -292,6 +287,11 @@ type Query {
   글 상세
   """
   zoom(id: ID!): Zoom
+
+  """
+  review 목록
+  """
+  zoomReviews(pagination: Pagination!, zoomId: ID!): [Review!]
 
   """
   글 목록

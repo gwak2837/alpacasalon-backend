@@ -95,7 +95,6 @@ CREATE TABLE zoom_review (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   creation_time timestamptz DEFAULT CURRENT_TIMESTAMP,
   modification_time timestamptz DEFAULT CURRENT_TIMESTAMP,
-  title varchar(100) NOT NULL,
   contents text NOT NULL,
   --
   zoom_id bigint NOT NULL REFERENCES zoom ON DELETE CASCADE,

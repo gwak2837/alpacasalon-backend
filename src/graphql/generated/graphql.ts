@@ -311,8 +311,6 @@ export type Query = {
   posts?: Maybe<Array<Post>>
   postsByGroup?: Maybe<Array<Post>>
   recommendationGroups?: Maybe<Array<Group>>
-  /** review 목록 */
-  reviews?: Maybe<Array<Review>>
   /** 글 검색 */
   searchPosts?: Maybe<Array<Post>>
   /** 글 검색 */
@@ -321,6 +319,8 @@ export type Query = {
   userByNickname?: Maybe<User>
   /** 글 상세 */
   zoom?: Maybe<Zoom>
+  /** review 목록 */
+  zoomReviews?: Maybe<Array<Review>>
   /** 글 목록 */
   zooms?: Maybe<Array<Zoom>>
 }
@@ -349,10 +349,6 @@ export type QueryPostsByGroupArgs = {
   groupId: Scalars['ID']
 }
 
-export type QueryReviewsArgs = {
-  pagination: Pagination
-}
-
 export type QuerySearchPostsArgs = {
   keywords: Array<Scalars['NonEmptyString']>
 }
@@ -367,6 +363,11 @@ export type QueryUserByNicknameArgs = {
 
 export type QueryZoomArgs = {
   id: Scalars['ID']
+}
+
+export type QueryZoomReviewsArgs = {
+  pagination: Pagination
+  zoomId: Scalars['ID']
 }
 
 export type QueryZoomsArgs = {
@@ -947,12 +948,6 @@ export type QueryResolvers<
     RequireFields<QueryPostsByGroupArgs, 'groupId'>
   >
   recommendationGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>
-  reviews?: Resolver<
-    Maybe<Array<ResolversTypes['Review']>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryReviewsArgs, 'pagination'>
-  >
   searchPosts?: Resolver<
     Maybe<Array<ResolversTypes['Post']>>,
     ParentType,
@@ -976,6 +971,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryZoomArgs, 'id'>
+  >
+  zoomReviews?: Resolver<
+    Maybe<Array<ResolversTypes['Review']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomReviewsArgs, 'pagination' | 'zoomId'>
   >
   zooms?: Resolver<
     Maybe<Array<ResolversTypes['Zoom']>>,

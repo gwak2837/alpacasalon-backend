@@ -20,7 +20,7 @@ import * as zoomMutationResolver from './zoom/Mutation'
 import * as zoomObjectResolver from './zoom/Object'
 import * as zoomQueryResolver from './zoom/Query'
 import * as zoomReviewMutationResolver from './review/Mutation'
-
+import * as zoomReviewQueryResolver from './review/Query'
 const resolversArray = [
   commentMutationResolver,
   commentObjectResolver,
@@ -42,6 +42,7 @@ const resolversArray = [
   zoomObjectResolver,
   zoomQueryResolver,
   zoomReviewMutationResolver,
+  zoomReviewQueryResolver,
 ]
 
 export const resolvers = mergeResolvers(resolversArray)
