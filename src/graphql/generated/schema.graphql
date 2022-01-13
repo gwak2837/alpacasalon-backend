@@ -83,6 +83,7 @@ type Mutation {
   createPoll(input: PollCreationInput!): Poll
   createPost(input: PostCreationInput!): Post
   createZoom(input: ZoomCreationInput!): Zoom
+  createZoomReview(input: ReviewCreationInput!): Review
   deleteComment(id: ID!): Comment
   deleteGroup(id: ID!): Group
   deletePost(id: ID!): Post
@@ -268,6 +269,11 @@ type Query {
   recommendationGroups: [Group!]
 
   """
+  review 목록
+  """
+  reviews(pagination: Pagination!): [Review!]
+
+  """
   글 검색
   """
   searchPosts(keywords: [NonEmptyString!]!): [Post!]
@@ -298,8 +304,12 @@ type Review {
   creationTime: DateTime!
   id: ID!
   modificationTime: DateTime!
-  title: NonEmptyString
   writer: User
+}
+
+input ReviewCreationInput {
+  contents: NonEmptyString
+  zoomId: ID!
 }
 
 enum Status {

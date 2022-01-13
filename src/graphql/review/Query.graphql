@@ -1,0 +1,4 @@
+type Query {
+  "review 목록"
+  reviews(pagination: Pagination!): [Review!]
+}
