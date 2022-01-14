@@ -127,6 +127,7 @@ type Notification {
 }
 
 enum NotificationType {
+  HOT_POST
   LIKING_COMMENT
   NEW_COMMENT
   NEW_SUBCOMMENT

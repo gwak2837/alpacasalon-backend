@@ -198,6 +198,7 @@ export type Notification = {
 }
 
 export enum NotificationType {
+  HotPost = 'HOT_POST',
   LikingComment = 'LIKING_COMMENT',
   NewComment = 'NEW_COMMENT',
   NewSubcomment = 'NEW_SUBCOMMENT',
