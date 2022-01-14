@@ -6,6 +6,8 @@ export const NotificationType = {
   NEW_SUBCOMMENT: 2,
 }
 
-// export const Notification: NotificationResolvers = {
-
-// }
+export const Notification: NotificationResolvers = {
+  sender: ({ sender }) => {
+    return sender?.id ? sender : null
+  },
+}
