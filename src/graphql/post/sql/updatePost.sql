@@ -20,7 +20,6 @@ WHERE id = $4
     OR image_urls <> $3
   )
 RETURNING id,
-  category,
   title,
   contents,
   image_urls

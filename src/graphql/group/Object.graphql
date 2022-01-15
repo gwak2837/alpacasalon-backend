@@ -8,6 +8,12 @@ type Group {
   # nullable
   description: NonEmptyString
   imageUrl: URL
+
+  # from other table
+  leader: User
+  newPostCount: NonNegativeInt!
+  isJoined: Boolean!
+  newMembers: [User!]
 }
 
 enum Gender {

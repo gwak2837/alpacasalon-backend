@@ -1,0 +1,17 @@
+type Zoom {
+  id: ID!
+  creationTime: DateTime!
+  modificationTime: DateTime!
+  title: NonEmptyString!
+  description: NonEmptyString!
+  whenWhere: NonEmptyString!
+  whenWhat: [NonEmptyString!]!
+  tag: [NonEmptyString!]
+
+  # nullable
+  imageUrl: URL
+  tags: [NonEmptyString!]
+
+  # from other table
+  isJoined: Boolean!
+}

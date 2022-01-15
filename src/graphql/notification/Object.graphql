@@ -1,8 +1,9 @@
 type Notification {
-  id: UUID!
+  id: ID!
   creationTime: DateTime!
   type: NotificationType!
   contents: NonEmptyString!
+  isRead: Boolean!
 
   # from other table
   receiver: User!

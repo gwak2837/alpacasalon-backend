@@ -1,0 +1,8 @@
+type Review {
+  id: ID!
+  creationTime: DateTime!
+  modificationTime: DateTime!
+  contents: NonEmptyString
+
+  writer: User
+}

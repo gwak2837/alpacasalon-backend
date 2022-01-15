@@ -47,9 +47,13 @@ type Group {
   description: NonEmptyString
   id: ID!
   imageUrl: URL
+  isJoined: Boolean!
+  leader: User
   memberCount: NonNegativeInt!
   modificationTime: DateTime!
   name: NonEmptyString!
+  newMembers: [User!]
+  newPostCount: NonNegativeInt!
 }
 
 input GroupCreationInput {
@@ -78,15 +82,20 @@ type Mutation {
   createGroup(input: GroupCreationInput!): Group
   createPoll(input: PollCreationInput!): Poll
   createPost(input: PostCreationInput!): Post
+  createZoom(input: ZoomCreationInput!): Zoom
+  createZoomReview(input: ReviewCreationInput!): Review
   deleteComment(id: ID!): Comment
   deleteGroup(id: ID!): Group
   deletePost(id: ID!): Post
-  joinGroup(id: ID): Boolean
+  deleteZoom(id: ID!): Zoom
+  joinGroup(id: ID): Group
+  joinZoom(id: ID!): Zoom
 
   """
   로그아웃 성공 여부 반환
   """
   logout: Boolean!
+  readNotifications(ids: [ID!]!): NonNegativeInt
   toggleLikingComment(id: ID!): Comment
 
   """
@@ -101,6 +110,7 @@ type Mutation {
   사용자 정보를 수정합니다
   """
   updateUser(input: UserModificationInput!): User
+  updateZoom(input: ZoomModificationInput!): Zoom
 }
 
 scalar NonEmptyString
@@ -110,7 +120,8 @@ scalar NonNegativeInt
 type Notification {
   contents: NonEmptyString!
   creationTime: DateTime!
-  id: UUID!
+  id: ID!
+  isRead: Boolean!
   receiver: User!
   sender: User
   type: NotificationType!
@@ -196,16 +207,16 @@ type Post {
 
 input PostCreationInput {
   contents: NonEmptyString!
-  groupId: ID!
+  groupId: ID
   imageUrls: [URL!]
   title: NonEmptyString!
 }
 
 input PostModificationInput {
-  contents: String
+  contents: NonEmptyString
   id: ID!
   imageUrls: [URL!]
-  title: String
+  title: NonEmptyString
 }
 
 type Query {
@@ -218,6 +229,7 @@ type Query {
   이번 달 핫한 이야기
   """
   famousPosts: [Post!]
+  group(id: ID!): Group
 
   """
   사용자 닉네임 중복 여부 검사
@@ -239,6 +251,8 @@ type Query {
   """
   myComments: [Comment!]
   myGroups: [Group!]
+  myPosts: [Post!]
+  myZooms: [Zoom!]
   notifications: [Notification!]
   participatingPolls: [Poll!]
 
@@ -251,7 +265,7 @@ type Query {
   글 목록
   """
   posts(pagination: Pagination!): [Post!]
-  postsByGroup: [Post!]
+  postsByGroup(groupId: ID!): [Post!]
   recommendationGroups: [Group!]
 
   """
@@ -260,9 +274,42 @@ type Query {
   searchPosts(keywords: [NonEmptyString!]!): [Post!]
 
   """
+  글 검색
+  """
+  searchZooms(keywords: [NonEmptyString!]!): [Zoom!]
+
+  """
   닉네임으로 사용자 검색
   """
   userByNickname(nickname: NonEmptyString!): User
+
+  """
+  글 상세
+  """
+  zoom(id: ID!): Zoom
+
+  """
+  review 목록
+  """
+  zoomReviews(pagination: Pagination!, zoomId: ID!): [Review!]
+
+  """
+  글 목록
+  """
+  zooms(pagination: Pagination!): [Zoom!]
+}
+
+type Review {
+  contents: NonEmptyString
+  creationTime: DateTime!
+  id: ID!
+  modificationTime: DateTime!
+  writer: User
+}
+
+input ReviewCreationInput {
+  contents: NonEmptyString
+  zoomId: ID!
 }
 
 enum Status {
@@ -282,6 +329,7 @@ type User {
   creationTime: DateTime!
   email: EmailAddress!
   gender: Gender!
+  hasNewNotifications: Boolean!
   id: UUID!
   imageUrl: URL
   likedCount: NonNegativeInt!
@@ -299,4 +347,31 @@ input UserModificationInput {
   imageUrl: URL
   nickname: NonEmptyString
   phoneNumber: NonEmptyString
+}
+
+type Zoom {
+  creationTime: DateTime!
+  description: NonEmptyString!
+  id: ID!
+  imageUrl: URL
+  isJoined: Boolean!
+  modificationTime: DateTime!
+  tag: [NonEmptyString!]
+  tags: [NonEmptyString!]
+  title: NonEmptyString!
+  whenWhat: [NonEmptyString!]!
+  whenWhere: NonEmptyString!
+}
+
+input ZoomCreationInput {
+  description: NonEmptyString!
+  imageUrl: URL
+  title: NonEmptyString!
+}
+
+input ZoomModificationInput {
+  contents: NonEmptyString
+  id: ID!
+  imageUrl: URL
+  title: NonEmptyString
 }

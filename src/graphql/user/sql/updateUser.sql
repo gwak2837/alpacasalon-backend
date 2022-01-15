@@ -52,4 +52,5 @@ WHERE id = $9
     FROM $8
   )
 RETURNING id,
-  nickname
+  nickname,
+  image_url

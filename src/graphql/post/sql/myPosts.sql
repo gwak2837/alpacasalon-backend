@@ -5,14 +5,13 @@ SELECT post.id,
   post.contents,
   post.image_urls,
   COUNT("comment".id) AS comment_count,
-  "user".id AS user__id,
-  "user".nickname AS user__nickname
+  "group".id AS group__id,
+  "group".name AS group__name
 FROM post
-  JOIN "user" ON "user".id = post.user_id
+  LEFT JOIN "group" ON "group".id = post.group_id
   LEFT JOIN "comment" ON "comment".post_id = post.id
-WHERE post.creation_time > $1
+WHERE user_id = $1
 GROUP BY post.id,
-  "user".id
-ORDER BY comment_count DESC,
-  creation_time DESC
-FETCH FIRST 3 ROWS ONLY
+  "user".id,
+  "group".id
+ORDER BY id DESC

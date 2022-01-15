@@ -62,9 +62,13 @@ export type Group = {
   description?: Maybe<Scalars['NonEmptyString']>
   id: Scalars['ID']
   imageUrl?: Maybe<Scalars['URL']>
+  isJoined: Scalars['Boolean']
+  leader?: Maybe<User>
   memberCount: Scalars['NonNegativeInt']
   modificationTime: Scalars['DateTime']
   name: Scalars['NonEmptyString']
+  newMembers?: Maybe<Array<User>>
+  newPostCount: Scalars['NonNegativeInt']
 }
 
 export type GroupCreationInput = {
@@ -86,12 +90,17 @@ export type Mutation = {
   createGroup?: Maybe<Group>
   createPoll?: Maybe<Poll>
   createPost?: Maybe<Post>
+  createZoom?: Maybe<Zoom>
+  createZoomReview?: Maybe<Review>
   deleteComment?: Maybe<Comment>
   deleteGroup?: Maybe<Group>
   deletePost?: Maybe<Post>
-  joinGroup?: Maybe<Scalars['Boolean']>
+  deleteZoom?: Maybe<Zoom>
+  joinGroup?: Maybe<Group>
+  joinZoom?: Maybe<Zoom>
   /** 로그아웃 성공 여부 반환 */
   logout: Scalars['Boolean']
+  readNotifications?: Maybe<Scalars['NonNegativeInt']>
   toggleLikingComment?: Maybe<Comment>
   /** 회원탈퇴 시 사용자 정보가 모두 초기화됩니다 */
   unregister?: Maybe<User>
@@ -100,6 +109,7 @@ export type Mutation = {
   updatePost?: Maybe<Post>
   /** 사용자 정보를 수정합니다 */
   updateUser?: Maybe<User>
+  updateZoom?: Maybe<Zoom>
 }
 
 export type MutationCreateCommentArgs = {
@@ -120,6 +130,14 @@ export type MutationCreatePostArgs = {
   input: PostCreationInput
 }
 
+export type MutationCreateZoomArgs = {
+  input: ZoomCreationInput
+}
+
+export type MutationCreateZoomReviewArgs = {
+  input: ReviewCreationInput
+}
+
 export type MutationDeleteCommentArgs = {
   id: Scalars['ID']
 }
@@ -132,8 +150,20 @@ export type MutationDeletePostArgs = {
   id: Scalars['ID']
 }
 
+export type MutationDeleteZoomArgs = {
+  id: Scalars['ID']
+}
+
 export type MutationJoinGroupArgs = {
   id?: InputMaybe<Scalars['ID']>
+}
+
+export type MutationJoinZoomArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationReadNotificationsArgs = {
+  ids: Array<Scalars['ID']>
 }
 
 export type MutationToggleLikingCommentArgs = {
@@ -157,11 +187,16 @@ export type MutationUpdateUserArgs = {
   input: UserModificationInput
 }
 
+export type MutationUpdateZoomArgs = {
+  input: ZoomModificationInput
+}
+
 export type Notification = {
   __typename?: 'Notification'
   contents: Scalars['NonEmptyString']
   creationTime: Scalars['DateTime']
-  id: Scalars['UUID']
+  id: Scalars['ID']
+  isRead: Scalars['Boolean']
   receiver: User
   sender?: Maybe<User>
   type: NotificationType
@@ -238,16 +273,16 @@ export type Post = {
 
 export type PostCreationInput = {
   contents: Scalars['NonEmptyString']
-  groupId: Scalars['ID']
+  groupId?: InputMaybe<Scalars['ID']>
   imageUrls?: InputMaybe<Array<Scalars['URL']>>
   title: Scalars['NonEmptyString']
 }
 
 export type PostModificationInput = {
-  contents?: InputMaybe<Scalars['String']>
+  contents?: InputMaybe<Scalars['NonEmptyString']>
   id: Scalars['ID']
   imageUrls?: InputMaybe<Array<Scalars['URL']>>
-  title?: InputMaybe<Scalars['String']>
+  title?: InputMaybe<Scalars['NonEmptyString']>
 }
 
 export type Query = {
@@ -256,6 +291,7 @@ export type Query = {
   commentsByPost?: Maybe<Array<Comment>>
   /** 이번 달 핫한 이야기 */
   famousPosts?: Maybe<Array<Post>>
+  group?: Maybe<Group>
   /** 사용자 닉네임 중복 여부 검사 */
   isNicknameUnique: Scalars['Boolean']
   /** 좋아요 누른 댓글 */
@@ -265,6 +301,8 @@ export type Query = {
   /** 내가 쓴 댓글 */
   myComments?: Maybe<Array<Comment>>
   myGroups?: Maybe<Array<Group>>
+  myPosts?: Maybe<Array<Post>>
+  myZooms?: Maybe<Array<Zoom>>
   notifications?: Maybe<Array<Notification>>
   participatingPolls?: Maybe<Array<Poll>>
   /** 글 상세 */
@@ -275,12 +313,24 @@ export type Query = {
   recommendationGroups?: Maybe<Array<Group>>
   /** 글 검색 */
   searchPosts?: Maybe<Array<Post>>
+  /** 글 검색 */
+  searchZooms?: Maybe<Array<Zoom>>
   /** 닉네임으로 사용자 검색 */
   userByNickname?: Maybe<User>
+  /** 글 상세 */
+  zoom?: Maybe<Zoom>
+  /** review 목록 */
+  zoomReviews?: Maybe<Array<Review>>
+  /** 글 목록 */
+  zooms?: Maybe<Array<Zoom>>
 }
 
 export type QueryCommentsByPostArgs = {
   postId: Scalars['ID']
+}
+
+export type QueryGroupArgs = {
+  id: Scalars['ID']
 }
 
 export type QueryIsNicknameUniqueArgs = {
@@ -295,12 +345,47 @@ export type QueryPostsArgs = {
   pagination: Pagination
 }
 
+export type QueryPostsByGroupArgs = {
+  groupId: Scalars['ID']
+}
+
 export type QuerySearchPostsArgs = {
+  keywords: Array<Scalars['NonEmptyString']>
+}
+
+export type QuerySearchZoomsArgs = {
   keywords: Array<Scalars['NonEmptyString']>
 }
 
 export type QueryUserByNicknameArgs = {
   nickname: Scalars['NonEmptyString']
+}
+
+export type QueryZoomArgs = {
+  id: Scalars['ID']
+}
+
+export type QueryZoomReviewsArgs = {
+  pagination: Pagination
+  zoomId: Scalars['ID']
+}
+
+export type QueryZoomsArgs = {
+  pagination: Pagination
+}
+
+export type Review = {
+  __typename?: 'Review'
+  contents?: Maybe<Scalars['NonEmptyString']>
+  creationTime: Scalars['DateTime']
+  id: Scalars['ID']
+  modificationTime: Scalars['DateTime']
+  writer?: Maybe<User>
+}
+
+export type ReviewCreationInput = {
+  contents?: InputMaybe<Scalars['NonEmptyString']>
+  zoomId: Scalars['ID']
 }
 
 export enum Status {
@@ -317,6 +402,7 @@ export type User = {
   creationTime: Scalars['DateTime']
   email: Scalars['EmailAddress']
   gender: Gender
+  hasNewNotifications: Scalars['Boolean']
   id: Scalars['UUID']
   imageUrl?: Maybe<Scalars['URL']>
   likedCount: Scalars['NonNegativeInt']
@@ -334,6 +420,34 @@ export type UserModificationInput = {
   imageUrl?: InputMaybe<Scalars['URL']>
   nickname?: InputMaybe<Scalars['NonEmptyString']>
   phoneNumber?: InputMaybe<Scalars['NonEmptyString']>
+}
+
+export type Zoom = {
+  __typename?: 'Zoom'
+  creationTime: Scalars['DateTime']
+  description: Scalars['NonEmptyString']
+  id: Scalars['ID']
+  imageUrl?: Maybe<Scalars['URL']>
+  isJoined: Scalars['Boolean']
+  modificationTime: Scalars['DateTime']
+  tag?: Maybe<Array<Scalars['NonEmptyString']>>
+  tags?: Maybe<Array<Scalars['NonEmptyString']>>
+  title: Scalars['NonEmptyString']
+  whenWhat: Array<Scalars['NonEmptyString']>
+  whenWhere: Scalars['NonEmptyString']
+}
+
+export type ZoomCreationInput = {
+  description: Scalars['NonEmptyString']
+  imageUrl?: InputMaybe<Scalars['URL']>
+  title: Scalars['NonEmptyString']
+}
+
+export type ZoomModificationInput = {
+  contents?: InputMaybe<Scalars['NonEmptyString']>
+  id: Scalars['ID']
+  imageUrl?: InputMaybe<Scalars['URL']>
+  title?: InputMaybe<Scalars['NonEmptyString']>
 }
 
 export type ResolverTypeWrapper<T> = Promise<T> | T
@@ -451,12 +565,17 @@ export type ResolversTypes = {
   PostCreationInput: PostCreationInput
   PostModificationInput: PostModificationInput
   Query: ResolverTypeWrapper<{}>
+  Review: ResolverTypeWrapper<Review>
+  ReviewCreationInput: ReviewCreationInput
   Status: Status
   String: ResolverTypeWrapper<Scalars['String']>
   URL: ResolverTypeWrapper<Scalars['URL']>
   UUID: ResolverTypeWrapper<Scalars['UUID']>
   User: ResolverTypeWrapper<User>
   UserModificationInput: UserModificationInput
+  Zoom: ResolverTypeWrapper<Zoom>
+  ZoomCreationInput: ZoomCreationInput
+  ZoomModificationInput: ZoomModificationInput
 }
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -489,11 +608,16 @@ export type ResolversParentTypes = {
   PostCreationInput: PostCreationInput
   PostModificationInput: PostModificationInput
   Query: {}
+  Review: Review
+  ReviewCreationInput: ReviewCreationInput
   String: Scalars['String']
   URL: Scalars['URL']
   UUID: Scalars['UUID']
   User: User
   UserModificationInput: UserModificationInput
+  Zoom: Zoom
+  ZoomCreationInput: ZoomCreationInput
+  ZoomModificationInput: ZoomModificationInput
 }
 
 export type CommentResolvers<
@@ -537,9 +661,13 @@ export type GroupResolvers<
   description?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['URL']>, ParentType, ContextType>
+  isJoined?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  leader?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   memberCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>
   modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
+  newMembers?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>
+  newPostCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -590,6 +718,18 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreatePostArgs, 'input'>
   >
+  createZoom?: Resolver<
+    Maybe<ResolversTypes['Zoom']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateZoomArgs, 'input'>
+  >
+  createZoomReview?: Resolver<
+    Maybe<ResolversTypes['Review']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateZoomReviewArgs, 'input'>
+  >
   deleteComment?: Resolver<
     Maybe<ResolversTypes['Comment']>,
     ParentType,
@@ -608,13 +748,31 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationDeletePostArgs, 'id'>
   >
+  deleteZoom?: Resolver<
+    Maybe<ResolversTypes['Zoom']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteZoomArgs, 'id'>
+  >
   joinGroup?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
+    Maybe<ResolversTypes['Group']>,
     ParentType,
     ContextType,
     RequireFields<MutationJoinGroupArgs, never>
   >
+  joinZoom?: Resolver<
+    Maybe<ResolversTypes['Zoom']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationJoinZoomArgs, 'id'>
+  >
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  readNotifications?: Resolver<
+    Maybe<ResolversTypes['NonNegativeInt']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationReadNotificationsArgs, 'ids'>
+  >
   toggleLikingComment?: Resolver<
     Maybe<ResolversTypes['Comment']>,
     ParentType,
@@ -646,6 +804,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateUserArgs, 'input'>
   >
+  updateZoom?: Resolver<
+    Maybe<ResolversTypes['Zoom']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateZoomArgs, 'input'>
+  >
 }
 
 export interface NonEmptyStringScalarConfig
@@ -664,7 +828,8 @@ export type NotificationResolvers<
 > = {
   contents?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
   creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
-  id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   receiver?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   sender?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   type?: Resolver<ResolversTypes['NotificationType'], ParentType, ContextType>
@@ -744,6 +909,12 @@ export type QueryResolvers<
     RequireFields<QueryCommentsByPostArgs, 'postId'>
   >
   famousPosts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>
+  group?: Resolver<
+    Maybe<ResolversTypes['Group']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryGroupArgs, 'id'>
+  >
   isNicknameUnique?: Resolver<
     ResolversTypes['Boolean'],
     ParentType,
@@ -754,6 +925,8 @@ export type QueryResolvers<
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   myComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>
   myGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>
+  myPosts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>
+  myZooms?: Resolver<Maybe<Array<ResolversTypes['Zoom']>>, ParentType, ContextType>
   notifications?: Resolver<Maybe<Array<ResolversTypes['Notification']>>, ParentType, ContextType>
   participatingPolls?: Resolver<Maybe<Array<ResolversTypes['Poll']>>, ParentType, ContextType>
   post?: Resolver<
@@ -768,7 +941,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryPostsArgs, 'pagination'>
   >
-  postsByGroup?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>
+  postsByGroup?: Resolver<
+    Maybe<Array<ResolversTypes['Post']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryPostsByGroupArgs, 'groupId'>
+  >
   recommendationGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>
   searchPosts?: Resolver<
     Maybe<Array<ResolversTypes['Post']>>,
@@ -776,12 +954,48 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QuerySearchPostsArgs, 'keywords'>
   >
+  searchZooms?: Resolver<
+    Maybe<Array<ResolversTypes['Zoom']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QuerySearchZoomsArgs, 'keywords'>
+  >
   userByNickname?: Resolver<
     Maybe<ResolversTypes['User']>,
     ParentType,
     ContextType,
     RequireFields<QueryUserByNicknameArgs, 'nickname'>
   >
+  zoom?: Resolver<
+    Maybe<ResolversTypes['Zoom']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomArgs, 'id'>
+  >
+  zoomReviews?: Resolver<
+    Maybe<Array<ResolversTypes['Review']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomReviewsArgs, 'pagination' | 'zoomId'>
+  >
+  zooms?: Resolver<
+    Maybe<Array<ResolversTypes['Zoom']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomsArgs, 'pagination'>
+  >
+}
+
+export type ReviewResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Review'] = ResolversParentTypes['Review']
+> = {
+  contents?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
+  creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  writer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
 export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['URL'], any> {
@@ -802,12 +1016,31 @@ export type UserResolvers<
   creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>
   gender?: Resolver<ResolversTypes['Gender'], ParentType, ContextType>
+  hasNewNotifications?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['URL']>, ParentType, ContextType>
   likedCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>
   modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   nickname?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
   phoneNumber?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ZoomResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Zoom'] = ResolversParentTypes['Zoom']
+> = {
+  creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  description?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  imageUrl?: Resolver<Maybe<ResolversTypes['URL']>, ParentType, ContextType>
+  isJoined?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  tag?: Resolver<Maybe<Array<ResolversTypes['NonEmptyString']>>, ParentType, ContextType>
+  tags?: Resolver<Maybe<Array<ResolversTypes['NonEmptyString']>>, ParentType, ContextType>
+  title?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
+  whenWhat?: Resolver<Array<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
+  whenWhere?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -831,7 +1064,9 @@ export type Resolvers<ContextType = any> = {
   PositiveInt?: GraphQLScalarType
   Post?: PostResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
+  Review?: ReviewResolvers<ContextType>
   URL?: GraphQLScalarType
   UUID?: GraphQLScalarType
   User?: UserResolvers<ContextType>
+  Zoom?: ZoomResolvers<ContextType>
 }

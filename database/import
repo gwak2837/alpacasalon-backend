@@ -29,12 +29,16 @@ echo $CONNECTION_STRING_WITH_SSL
 
 do_not_print=$(PGOPTIONS='--client-min-messages=warning' psql $CONNECTION_STRING_WITH_SSL -f database/initialization.sql)
 
-# 테이블 순서 중요
+# 테이블 생성 순서와 동일하게
 public_tables=(
   public.user
   public.group
-  public.post
   public.user_x_group
+  public.post
+  public.zoom
+  public.user_x_joined_zoom
+  public.zoom_review
+  public.user_x_liked_zoom_review
   public.notification
   public.comment
   public.user_x_liked_comment
@@ -46,16 +50,18 @@ public_tables=(
 )
 
 sequence_tables=(
-  \"group\"
-  post
-  notification
   comment
-  poll
-  poll_selection
+  \"group\"
+  notification
   poll_comment
+  poll_selection
+  poll
+  post
+  zoom_review
+  zoom
 )
 
-# 테이블 순서 중요
+# 테이블 생성 순서와 동일하게
 deleted_tables=(
   deleted.user
   deleted.group
