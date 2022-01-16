@@ -203,6 +203,7 @@ export type Notification = {
 }
 
 export enum NotificationType {
+  HotPost = 'HOT_POST',
   LikingComment = 'LIKING_COMMENT',
   NewComment = 'NEW_COMMENT',
   NewSubcomment = 'NEW_SUBCOMMENT',
@@ -292,6 +293,7 @@ export type Query = {
   /** 이번 달 핫한 이야기 */
   famousPosts?: Maybe<Array<Post>>
   group?: Maybe<Group>
+  isGroupNameUnique: Scalars['Boolean']
   /** 사용자 닉네임 중복 여부 검사 */
   isNicknameUnique: Scalars['Boolean']
   /** 좋아요 누른 댓글 */
@@ -319,6 +321,7 @@ export type Query = {
   userByNickname?: Maybe<User>
   /** 글 상세 */
   zoom?: Maybe<Zoom>
+  zoomTitleById?: Maybe<Zoom>
   /** review 목록 */
   zoomReviews?: Maybe<Array<Review>>
   /** 글 목록 */
@@ -331,6 +334,10 @@ export type QueryCommentsByPostArgs = {
 
 export type QueryGroupArgs = {
   id: Scalars['ID']
+}
+
+export type QueryIsGroupNameUniqueArgs = {
+  name: Scalars['NonEmptyString']
 }
 
 export type QueryIsNicknameUniqueArgs = {
@@ -362,6 +369,10 @@ export type QueryUserByNicknameArgs = {
 }
 
 export type QueryZoomArgs = {
+  id: Scalars['ID']
+}
+
+export type QueryZoomTitleByIdArgs = {
   id: Scalars['ID']
 }
 
@@ -915,6 +926,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGroupArgs, 'id'>
   >
+  isGroupNameUnique?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryIsGroupNameUniqueArgs, 'name'>
+  >
   isNicknameUnique?: Resolver<
     ResolversTypes['Boolean'],
     ParentType,
@@ -971,6 +988,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryZoomArgs, 'id'>
+  >
+  zoomTitleById?: Resolver<
+    Maybe<ResolversTypes['Zoom']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomTitleByIdArgs, 'id'>
   >
   zoomReviews?: Resolver<
     Maybe<Array<ResolversTypes['Review']>>,
