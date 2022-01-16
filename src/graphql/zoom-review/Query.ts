@@ -18,7 +18,7 @@ export const Query: QueryResolvers<ApolloContext> = {
 
     // pagination
     if (pagination.lastId) {
-      sql = buildSelect(sql, 'WHERE', 'zoom_review.id >  $1')
+      sql = buildSelect(sql, 'WHERE', 'zoom_review.id < $1')
       values.push(pagination.lastId)
     }
 
