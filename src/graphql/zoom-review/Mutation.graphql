@@ -1,8 +1,8 @@
 type Mutation {
-  createZoomReview(input: ReviewCreationInput!): Review
+  createZoomReview(input: ZoomReviewCreationInput!): ZoomReview
 }
 
-input ReviewCreationInput {
+input ZoomReviewCreationInput {
   zoomId: ID!
   contents: NonEmptyString!
 }

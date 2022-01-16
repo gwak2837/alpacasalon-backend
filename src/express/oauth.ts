@@ -84,6 +84,7 @@ export function setOAuthStrategies(app: Express) {
     const kakaoAccount = kakaoUserInfo.kakao_account as any
     const referer = req.headers.referer
     const frontendUrl = referer?.substring(0, referer?.length - 1) ?? process.env.FRONTEND_URL
+    console.log('👀 - frontendUrl', frontendUrl)
 
     // 선택항목 미동의 시 다른 페이지로 리다이렉트 하기
     if (!kakaoAccount.birthyear || !kakaoAccount.birthday || !kakaoAccount.gender) {

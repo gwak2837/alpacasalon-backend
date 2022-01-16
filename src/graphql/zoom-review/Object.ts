@@ -1,6 +1,6 @@
-import { ReviewResolvers } from '../generated/graphql'
+import { ZoomReviewResolvers } from '../generated/graphql'
 
-export const Review: ReviewResolvers = {
+export const ZoomReview: ZoomReviewResolvers = {
   writer: ({ writer }) => {
     return writer?.id ? writer : null
   },

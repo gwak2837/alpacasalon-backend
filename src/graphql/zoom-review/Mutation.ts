@@ -2,8 +2,7 @@ import { AuthenticationError, UserInputError } from 'apollo-server-errors'
 
 import { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
-import { graphqlRelationMapping } from '../common/ORM'
-import { MutationResolvers } from '../generated/graphql'
+import { MutationResolvers, ZoomReview } from '../generated/graphql'
 import checkZoom from './sql/checkZoom.sql'
 import createZoomReview from './sql/createZoomReview.sql'
 
@@ -16,6 +15,8 @@ export const Mutation: MutationResolvers<ApolloContext> = {
 
     const { rows } = await poolQuery(createZoomReview, [input.contents, input.zoomId, userId])
 
-    return graphqlRelationMapping(rows[0])
+    return {
+      id: rows[0].id,
+    } as ZoomReview
   },
 }

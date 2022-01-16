@@ -1,4 +1,4 @@
 type Query {
   "review 목록"
-  zoomReviews(pagination: Pagination!, zoomId: ID!): [Review!]
+  zoomReviews(zoomId: ID!, pagination: Pagination!): [ZoomReview!]
 }
