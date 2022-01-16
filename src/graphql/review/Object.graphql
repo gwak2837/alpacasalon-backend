@@ -2,7 +2,6 @@ type Review {
   id: ID!
   creationTime: DateTime!
   modificationTime: DateTime!
-  title: NonEmptyString
   contents: NonEmptyString
 
   writer: User

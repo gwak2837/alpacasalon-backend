@@ -33,6 +33,7 @@ export async function startApolloServer() {
       if (!jwt) return {}
 
       const verifiedJwt = await verifyJWT(jwt).catch(() => null)
+
       if (!verifiedJwt) return {}
 
       const { rowCount, rows } = await poolQuery(user, [

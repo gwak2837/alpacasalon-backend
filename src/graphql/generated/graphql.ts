@@ -91,6 +91,7 @@ export type Mutation = {
   createPoll?: Maybe<Poll>
   createPost?: Maybe<Post>
   createZoom?: Maybe<Zoom>
+  createZoomReview?: Maybe<Review>
   deleteComment?: Maybe<Comment>
   deleteGroup?: Maybe<Group>
   deletePost?: Maybe<Post>
@@ -131,6 +132,10 @@ export type MutationCreatePostArgs = {
 
 export type MutationCreateZoomArgs = {
   input: ZoomCreationInput
+}
+
+export type MutationCreateZoomReviewArgs = {
+  input: ReviewCreationInput
 }
 
 export type MutationDeleteCommentArgs = {
@@ -317,6 +322,8 @@ export type Query = {
   /** 글 상세 */
   zoom?: Maybe<Zoom>
   zoomTitleById?: Maybe<Zoom>
+  /** review 목록 */
+  zoomReviews?: Maybe<Array<Review>>
   /** 글 목록 */
   zooms?: Maybe<Array<Zoom>>
 }
@@ -369,6 +376,11 @@ export type QueryZoomTitleByIdArgs = {
   id: Scalars['ID']
 }
 
+export type QueryZoomReviewsArgs = {
+  pagination: Pagination
+  zoomId: Scalars['ID']
+}
+
 export type QueryZoomsArgs = {
   pagination: Pagination
 }
@@ -379,8 +391,12 @@ export type Review = {
   creationTime: Scalars['DateTime']
   id: Scalars['ID']
   modificationTime: Scalars['DateTime']
-  title?: Maybe<Scalars['NonEmptyString']>
   writer?: Maybe<User>
+}
+
+export type ReviewCreationInput = {
+  contents?: InputMaybe<Scalars['NonEmptyString']>
+  zoomId: Scalars['ID']
 }
 
 export enum Status {
@@ -561,6 +577,7 @@ export type ResolversTypes = {
   PostModificationInput: PostModificationInput
   Query: ResolverTypeWrapper<{}>
   Review: ResolverTypeWrapper<Review>
+  ReviewCreationInput: ReviewCreationInput
   Status: Status
   String: ResolverTypeWrapper<Scalars['String']>
   URL: ResolverTypeWrapper<Scalars['URL']>
@@ -603,6 +620,7 @@ export type ResolversParentTypes = {
   PostModificationInput: PostModificationInput
   Query: {}
   Review: Review
+  ReviewCreationInput: ReviewCreationInput
   String: Scalars['String']
   URL: Scalars['URL']
   UUID: Scalars['UUID']
@@ -716,6 +734,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationCreateZoomArgs, 'input'>
+  >
+  createZoomReview?: Resolver<
+    Maybe<ResolversTypes['Review']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateZoomReviewArgs, 'input'>
   >
   deleteComment?: Resolver<
     Maybe<ResolversTypes['Comment']>,
@@ -971,6 +995,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryZoomTitleByIdArgs, 'id'>
   >
+  zoomReviews?: Resolver<
+    Maybe<Array<ResolversTypes['Review']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomReviewsArgs, 'pagination' | 'zoomId'>
+  >
   zooms?: Resolver<
     Maybe<Array<ResolversTypes['Zoom']>>,
     ParentType,
@@ -987,7 +1017,6 @@ export type ReviewResolvers<
   creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
-  title?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
   writer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
