@@ -17,13 +17,13 @@ export const Query: QueryResolvers<ApolloContext> = {
 
     const { rows } = await poolQuery(myGroups, [userId, new Date(Date.now() - 1 * 86_400_000)])
 
-    return rows.map((row) => graphqlRelationMapping(row, 'group'))
+    return rows.map((row) => graphqlRelationMapping(row))
   },
 
   recommendationGroups: async () => {
     const { rows } = await poolQuery(recommandationGroups)
 
-    return rows.map((row) => graphqlRelationMapping(row, 'group'))
+    return rows.map((row) => graphqlRelationMapping(row))
   },
 
   isGroupNameUnique: async (_, { name }) => {

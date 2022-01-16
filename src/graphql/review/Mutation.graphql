@@ -3,6 +3,6 @@ type Mutation {
 }
 
 input ReviewCreationInput {
-  contents: NonEmptyString
   zoomId: ID!
+  contents: NonEmptyString!
 }
