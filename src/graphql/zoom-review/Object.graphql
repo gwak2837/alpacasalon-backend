@@ -1,4 +1,4 @@
-type Review {
+type ZoomReview {
   id: ID!
   creationTime: DateTime!
   modificationTime: DateTime!

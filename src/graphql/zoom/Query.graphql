@@ -9,4 +9,6 @@ type Query {
   searchZooms(keywords: [NonEmptyString!]!): [Zoom!]
 
   myZooms: [Zoom!]
+
+  zoomTitleById(id: ID!): Zoom
 }

@@ -14,7 +14,7 @@ const orm: Record<string, ObjectRelationMapping> = {
 }
 
 // Database row -> GraphQL object
-export function graphqlRelationMapping(row: Record<string, unknown>, tableName: string) {
+export function graphqlRelationMapping(row: Record<string, unknown>) {
   let table: Record<string, unknown> = {}
   const otherTables: Record<string, Record<string, unknown>> = {}
 
@@ -29,10 +29,10 @@ export function graphqlRelationMapping(row: Record<string, unknown>, tableName: 
     }
   }
 
-  table = (orm[tableName] ?? orm.default)(table)
+  table = orm.default(table)
 
   for (const otherTable in otherTables) {
-    otherTables[otherTable] = (orm[otherTable] ?? orm.default)(otherTables[otherTable])
+    otherTables[otherTable] = orm.default(otherTables[otherTable])
   }
 
   return { ...table, ...otherTables } as any

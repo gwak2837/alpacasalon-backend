@@ -21,7 +21,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
       userId,
     ])
 
-    return graphqlRelationMapping(rows[0], 'zoom')
+    return graphqlRelationMapping(rows[0])
   },
 
   // updateZoom: async (_, { input }, { userId }) => {

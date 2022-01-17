@@ -1,4 +1,0 @@
-type Query {
-  "review 목록"
-  zoomReviews(pagination: Pagination!, zoomId: ID!): [Review!]
-}

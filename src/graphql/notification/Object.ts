@@ -4,8 +4,11 @@ export const NotificationType = {
   NEW_COMMENT: 0,
   LIKING_COMMENT: 1,
   NEW_SUBCOMMENT: 2,
+  HOT_POST: 3,
 }
 
-// export const Notification: NotificationResolvers = {
-
-// }
+export const Notification: NotificationResolvers = {
+  sender: ({ sender }) => {
+    return sender?.id ? sender : null
+  },
+}
