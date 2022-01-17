@@ -91,7 +91,7 @@ export type Mutation = {
   createPoll?: Maybe<Poll>
   createPost?: Maybe<Post>
   createZoom?: Maybe<Zoom>
-  createZoomReview?: Maybe<Review>
+  createZoomReview?: Maybe<ZoomReview>
   deleteComment?: Maybe<Comment>
   deleteGroup?: Maybe<Group>
   deletePost?: Maybe<Post>
@@ -135,7 +135,7 @@ export type MutationCreateZoomArgs = {
 }
 
 export type MutationCreateZoomReviewArgs = {
-  input: ReviewCreationInput
+  input: ZoomReviewCreationInput
 }
 
 export type MutationDeleteCommentArgs = {
@@ -321,9 +321,9 @@ export type Query = {
   userByNickname?: Maybe<User>
   /** 글 상세 */
   zoom?: Maybe<Zoom>
-  zoomTitleById?: Maybe<Zoom>
   /** review 목록 */
-  zoomReviews?: Maybe<Array<Review>>
+  zoomReviews?: Maybe<Array<ZoomReview>>
+  zoomTitleById?: Maybe<Zoom>
   /** 글 목록 */
   zooms?: Maybe<Array<Zoom>>
 }
@@ -372,31 +372,17 @@ export type QueryZoomArgs = {
   id: Scalars['ID']
 }
 
-export type QueryZoomTitleByIdArgs = {
-  id: Scalars['ID']
-}
-
 export type QueryZoomReviewsArgs = {
   pagination: Pagination
   zoomId: Scalars['ID']
 }
 
+export type QueryZoomTitleByIdArgs = {
+  id: Scalars['ID']
+}
+
 export type QueryZoomsArgs = {
   pagination: Pagination
-}
-
-export type Review = {
-  __typename?: 'Review'
-  contents?: Maybe<Scalars['NonEmptyString']>
-  creationTime: Scalars['DateTime']
-  id: Scalars['ID']
-  modificationTime: Scalars['DateTime']
-  writer?: Maybe<User>
-}
-
-export type ReviewCreationInput = {
-  contents?: InputMaybe<Scalars['NonEmptyString']>
-  zoomId: Scalars['ID']
 }
 
 export enum Status {
@@ -459,6 +445,20 @@ export type ZoomModificationInput = {
   id: Scalars['ID']
   imageUrl?: InputMaybe<Scalars['URL']>
   title?: InputMaybe<Scalars['NonEmptyString']>
+}
+
+export type ZoomReview = {
+  __typename?: 'ZoomReview'
+  contents?: Maybe<Scalars['NonEmptyString']>
+  creationTime: Scalars['DateTime']
+  id: Scalars['ID']
+  modificationTime: Scalars['DateTime']
+  writer?: Maybe<User>
+}
+
+export type ZoomReviewCreationInput = {
+  contents: Scalars['NonEmptyString']
+  zoomId: Scalars['ID']
 }
 
 export type ResolverTypeWrapper<T> = Promise<T> | T
@@ -576,8 +576,6 @@ export type ResolversTypes = {
   PostCreationInput: PostCreationInput
   PostModificationInput: PostModificationInput
   Query: ResolverTypeWrapper<{}>
-  Review: ResolverTypeWrapper<Review>
-  ReviewCreationInput: ReviewCreationInput
   Status: Status
   String: ResolverTypeWrapper<Scalars['String']>
   URL: ResolverTypeWrapper<Scalars['URL']>
@@ -587,6 +585,8 @@ export type ResolversTypes = {
   Zoom: ResolverTypeWrapper<Zoom>
   ZoomCreationInput: ZoomCreationInput
   ZoomModificationInput: ZoomModificationInput
+  ZoomReview: ResolverTypeWrapper<ZoomReview>
+  ZoomReviewCreationInput: ZoomReviewCreationInput
 }
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -619,8 +619,6 @@ export type ResolversParentTypes = {
   PostCreationInput: PostCreationInput
   PostModificationInput: PostModificationInput
   Query: {}
-  Review: Review
-  ReviewCreationInput: ReviewCreationInput
   String: Scalars['String']
   URL: Scalars['URL']
   UUID: Scalars['UUID']
@@ -629,6 +627,8 @@ export type ResolversParentTypes = {
   Zoom: Zoom
   ZoomCreationInput: ZoomCreationInput
   ZoomModificationInput: ZoomModificationInput
+  ZoomReview: ZoomReview
+  ZoomReviewCreationInput: ZoomReviewCreationInput
 }
 
 export type CommentResolvers<
@@ -736,7 +736,7 @@ export type MutationResolvers<
     RequireFields<MutationCreateZoomArgs, 'input'>
   >
   createZoomReview?: Resolver<
-    Maybe<ResolversTypes['Review']>,
+    Maybe<ResolversTypes['ZoomReview']>,
     ParentType,
     ContextType,
     RequireFields<MutationCreateZoomReviewArgs, 'input'>
@@ -989,17 +989,17 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryZoomArgs, 'id'>
   >
+  zoomReviews?: Resolver<
+    Maybe<Array<ResolversTypes['ZoomReview']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryZoomReviewsArgs, 'pagination' | 'zoomId'>
+  >
   zoomTitleById?: Resolver<
     Maybe<ResolversTypes['Zoom']>,
     ParentType,
     ContextType,
     RequireFields<QueryZoomTitleByIdArgs, 'id'>
-  >
-  zoomReviews?: Resolver<
-    Maybe<Array<ResolversTypes['Review']>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryZoomReviewsArgs, 'pagination' | 'zoomId'>
   >
   zooms?: Resolver<
     Maybe<Array<ResolversTypes['Zoom']>>,
@@ -1007,18 +1007,6 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryZoomsArgs, 'pagination'>
   >
-}
-
-export type ReviewResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Review'] = ResolversParentTypes['Review']
-> = {
-  contents?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
-  creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
-  modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
-  writer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
 export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['URL'], any> {
@@ -1067,6 +1055,18 @@ export type ZoomResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type ZoomReviewResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ZoomReview'] = ResolversParentTypes['ZoomReview']
+> = {
+  contents?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
+  creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  writer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type Resolvers<ContextType = any> = {
   Comment?: CommentResolvers<ContextType>
   Date?: GraphQLScalarType
@@ -1087,9 +1087,9 @@ export type Resolvers<ContextType = any> = {
   PositiveInt?: GraphQLScalarType
   Post?: PostResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
-  Review?: ReviewResolvers<ContextType>
   URL?: GraphQLScalarType
   UUID?: GraphQLScalarType
   User?: UserResolvers<ContextType>
   Zoom?: ZoomResolvers<ContextType>
+  ZoomReview?: ZoomReviewResolvers<ContextType>
 }

@@ -1,4 +1,4 @@
-import { Review } from '../generated/graphql'
+import { ZoomReview } from '../generated/graphql'
 
 export function zoomReviewORM(row: Record<string, any>) {
   return {
@@ -10,5 +10,5 @@ export function zoomReviewORM(row: Record<string, any>) {
       id: row.user__id,
       nickname: row.user__nickname,
     },
-  } as Review
+  } as ZoomReview
 }

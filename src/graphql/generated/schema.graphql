@@ -83,7 +83,7 @@ type Mutation {
   createPoll(input: PollCreationInput!): Poll
   createPost(input: PostCreationInput!): Post
   createZoom(input: ZoomCreationInput!): Zoom
-  createZoomReview(input: ReviewCreationInput!): Review
+  createZoomReview(input: ZoomReviewCreationInput!): ZoomReview
   deleteComment(id: ID!): Comment
   deleteGroup(id: ID!): Group
   deletePost(id: ID!): Post
@@ -289,30 +289,17 @@ type Query {
   글 상세
   """
   zoom(id: ID!): Zoom
-  zoomTitleById(id: ID!): Zoom
 
   """
   review 목록
   """
-  zoomReviews(pagination: Pagination!, zoomId: ID!): [Review!]
+  zoomReviews(pagination: Pagination!, zoomId: ID!): [ZoomReview!]
+  zoomTitleById(id: ID!): Zoom
 
   """
   글 목록
   """
   zooms(pagination: Pagination!): [Zoom!]
-}
-
-type Review {
-  contents: NonEmptyString
-  creationTime: DateTime!
-  id: ID!
-  modificationTime: DateTime!
-  writer: User
-}
-
-input ReviewCreationInput {
-  contents: NonEmptyString
-  zoomId: ID!
 }
 
 enum Status {
@@ -377,4 +364,17 @@ input ZoomModificationInput {
   id: ID!
   imageUrl: URL
   title: NonEmptyString
+}
+
+type ZoomReview {
+  contents: NonEmptyString
+  creationTime: DateTime!
+  id: ID!
+  modificationTime: DateTime!
+  writer: User
+}
+
+input ZoomReviewCreationInput {
+  contents: NonEmptyString!
+  zoomId: ID!
 }

@@ -18,7 +18,7 @@ export const Query: QueryResolvers<ApolloContext> = {
 
     if (rowCount === 0) throw new UserInputError(`id:${id} 의 Zoom을 찾을 수 없습니다.`)
 
-    return graphqlRelationMapping(rows[0], 'zoom')
+    return graphqlRelationMapping(rows[0])
   },
 
   zooms: async (_, { pagination }) => {
@@ -33,7 +33,7 @@ export const Query: QueryResolvers<ApolloContext> = {
 
     const { rows } = await poolQuery(sql, values)
 
-    return rows.map((row) => graphqlRelationMapping(row, 'zoom'))
+    return rows.map((row) => graphqlRelationMapping(row))
   },
 
   myZooms: async (_, __, { userId }) => {
@@ -41,12 +41,12 @@ export const Query: QueryResolvers<ApolloContext> = {
 
     const { rows } = await poolQuery(myZooms, [userId])
 
-    return rows.map((row) => graphqlRelationMapping(row, 'zoom'))
+    return rows.map((row) => graphqlRelationMapping(row))
   },
 
   zoomTitleById: async (_, { id }) => {
     const { rows } = await poolQuery(zoomTitleById, [id])
 
-    return graphqlRelationMapping(rows[0], 'zoom')
+    return graphqlRelationMapping(rows[0])
   },
 }

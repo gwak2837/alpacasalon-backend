@@ -33,6 +33,6 @@ export const Query: QueryResolvers<ApolloContext> = {
     if (rowCount === 0)
       throw new UserInputError(`nickname: ${nickname} 의 사용자를 찾을 수 없습니다.`)
 
-    return graphqlRelationMapping(rows[0], 'user')
+    return graphqlRelationMapping(rows[0])
   },
 }

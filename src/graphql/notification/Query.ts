@@ -12,6 +12,6 @@ export const Query: QueryResolvers<ApolloContext> = {
 
     const { rows } = await poolQuery(notifications, [userId])
 
-    return rows.map((row) => graphqlRelationMapping(row, 'notification'))
+    return rows.map((row) => graphqlRelationMapping(row))
   },
 }

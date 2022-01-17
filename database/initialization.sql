@@ -77,7 +77,7 @@ CREATE TABLE zoom (
   title varchar(100) NOT NULL,
   description varchar(200) NOT NULL,
   image_url text NOT NULL,
-  "when" timestamptz NOT NULL,
+  start_time timestamptz NOT NULL,
   when_where text NOT NULL,
   when_what text [] NOT NULL,
   tags varchar(20) []
