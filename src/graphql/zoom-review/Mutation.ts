@@ -11,12 +11,16 @@ import countZoomReviewLike from './sql/countZoomReviewLike.sql'
 
 export const Mutation: MutationResolvers<ApolloContext> = {
   createZoomReview: async (_, { input }, { userId }) => {
-    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
+    // if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     const { rowCount } = await poolQuery(checkZoom, [input.zoomId])
     if (rowCount === 0) throw new UserInputError('해당 정보가 잘못 되었습니다.')
 
-    const { rows } = await poolQuery(createZoomReview, [input.contents, input.zoomId, userId])
+    const { rows } = await poolQuery(createZoomReview, [
+      input.contents,
+      input.zoomId,
+      'd4dbb193-389c-4c0d-b6b6-8adb9d279c5a',
+    ])
 
     return {
       id: rows[0].id,
@@ -24,13 +28,13 @@ export const Mutation: MutationResolvers<ApolloContext> = {
   },
 
   toggleLikingZoomReview: async (_, { id }, { userId }) => {
-    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
+    // if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     const { rowCount } = await poolQuery(checkZoomReview, [id])
     if (rowCount === 0) throw new UserInputError('해당 정보가 잘못 되었습니다.')
 
     const likeResult = await poolQuery(createOrDeleteZoomReviewLike, [
-      'd4dbb193-389c-4c0d-b6b6-8adb9d279c5a',
+      'a20bf234-d89b-4600-af33-98bf56df2e1b',
       id,
     ])
 
