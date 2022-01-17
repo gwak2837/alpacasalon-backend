@@ -1,0 +1,1 @@
+SELECT toggle_liking_zoom_review($1, $2) AS result

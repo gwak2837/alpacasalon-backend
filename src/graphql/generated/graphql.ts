@@ -102,6 +102,7 @@ export type Mutation = {
   logout: Scalars['Boolean']
   readNotifications?: Maybe<Scalars['NonNegativeInt']>
   toggleLikingComment?: Maybe<Comment>
+  toggleLikingZoomReview?: Maybe<Review>
   /** 회원탈퇴 시 사용자 정보가 모두 초기화됩니다 */
   unregister?: Maybe<User>
   updateComment?: Maybe<Comment>
@@ -167,6 +168,10 @@ export type MutationReadNotificationsArgs = {
 }
 
 export type MutationToggleLikingCommentArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationToggleLikingZoomReviewArgs = {
   id: Scalars['ID']
 }
 
@@ -379,6 +384,8 @@ export type Review = {
   contents?: Maybe<Scalars['NonEmptyString']>
   creationTime: Scalars['DateTime']
   id: Scalars['ID']
+  isLiked: Scalars['Boolean']
+  likedCount: Scalars['NonNegativeInt']
   modificationTime: Scalars['DateTime']
   writer?: Maybe<User>
 }
@@ -779,6 +786,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationToggleLikingCommentArgs, 'id'>
   >
+  toggleLikingZoomReview?: Resolver<
+    Maybe<ResolversTypes['Review']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationToggleLikingZoomReviewArgs, 'id'>
+  >
   unregister?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   updateComment?: Resolver<
     Maybe<ResolversTypes['Comment']>,
@@ -993,6 +1006,8 @@ export type ReviewResolvers<
   contents?: Resolver<Maybe<ResolversTypes['NonEmptyString']>, ParentType, ContextType>
   creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  isLiked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  likedCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>
   modificationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   writer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
