@@ -1,4 +1,4 @@
-import { UserInputError } from 'apollo-server-errors'
+import { AuthenticationError, UserInputError } from 'apollo-server-errors'
 
 import { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
@@ -10,10 +10,10 @@ import reviews from './sql/reviews.sql'
 
 export const Query: QueryResolvers<ApolloContext> = {
   zoomReviews: async (_, { pagination, zoomId }, { userId }) => {
-    // if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
+    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     let sql = reviews
-    const values = [pagination.limit]
+    // const values = [pagination.limit]
 
     const { rowCount } = await poolQuery(checkZoom, [zoomId])
     if (rowCount === 0) throw new UserInputError(`zoom:${zoomId}는 존재하지 않습니다.`)

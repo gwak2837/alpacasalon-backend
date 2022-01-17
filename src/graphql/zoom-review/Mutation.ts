@@ -11,7 +11,7 @@ import countZoomReviewLike from './sql/countZoomReviewLike.sql'
 
 export const Mutation: MutationResolvers<ApolloContext> = {
   createZoomReview: async (_, { input }, { userId }) => {
-    // if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
+    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     const { rowCount } = await poolQuery(checkZoom, [input.zoomId])
     if (rowCount === 0) throw new UserInputError('해당 정보가 잘못 되었습니다.')
@@ -28,13 +28,13 @@ export const Mutation: MutationResolvers<ApolloContext> = {
   },
 
   toggleLikingZoomReview: async (_, { id }, { userId }) => {
-    // if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
+    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     const { rowCount } = await poolQuery(checkZoomReview, [id])
     if (rowCount === 0) throw new UserInputError('해당 정보가 잘못 되었습니다.')
 
     const likeResult = await poolQuery(createOrDeleteZoomReviewLike, [
-      'a20bf234-d89b-4600-af33-98bf56df2e1b',
+      'ee360834-955c-4011-88b1-a71e78ec7630',
       id,
     ])
 
