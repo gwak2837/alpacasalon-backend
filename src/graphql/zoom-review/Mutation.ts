@@ -16,11 +16,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
     const { rowCount } = await poolQuery(checkZoom, [input.zoomId])
     if (rowCount === 0) throw new UserInputError('해당 정보가 잘못 되었습니다.')
 
-    const { rows } = await poolQuery(createZoomReview, [
-      input.contents,
-      input.zoomId,
-      'd4dbb193-389c-4c0d-b6b6-8adb9d279c5a',
-    ])
+    const { rows } = await poolQuery(createZoomReview, [input.contents, input.zoomId, userId])
 
     return {
       id: rows[0].id,
@@ -33,10 +29,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
     const { rowCount } = await poolQuery(checkZoomReview, [id])
     if (rowCount === 0) throw new UserInputError('해당 정보가 잘못 되었습니다.')
 
-    const likeResult = await poolQuery(createOrDeleteZoomReviewLike, [
-      'ee360834-955c-4011-88b1-a71e78ec7630',
-      id,
-    ])
+    const likeResult = await poolQuery(createOrDeleteZoomReviewLike, [userId, id])
 
     const countResult = await poolQuery(countZoomReviewLike, [id])
 
