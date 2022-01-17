@@ -24,7 +24,7 @@ export const Query: QueryResolvers<ApolloContext> = {
     //   values.push(pagination.lastId)
     // }
 
-    const { rows } = await poolQuery(sql, ['a20bf234-d89b-4600-af33-98bf56df2e1b', zoomId])
+    const { rows } = await poolQuery(sql, [userId, zoomId])
 
     return rows.map((row) => graphqlRelationMapping(row))
   },
