@@ -5,7 +5,6 @@ import { poolQuery } from '../../database/postgres'
 import { MutationResolvers, ZoomReview } from '../generated/graphql'
 import checkZoom from './sql/checkZoom.sql'
 import checkZoomReview from './sql/checkZoomReview.sql'
-import countZoomReviewLike from './sql/countZoomReviewLike.sql'
 import createZoomReview from './sql/createZoomReview.sql'
 import toggleLikingZoomReview from './sql/toggleLikingZoomReview.sql'
 
