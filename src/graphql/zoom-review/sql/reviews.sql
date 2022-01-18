@@ -15,8 +15,8 @@ SELECT zoom_review.id,
   COUNT(DISTINCT is_liked.user_id) AS liked_count
 FROM zoom_review
   LEFT JOIN "user" ON zoom_review.user_id = "user".id
+  AND zoom_review.zoom_id = $2
   LEFT JOIN "user_x_liked_zoom_review" AS is_liked ON zoom_review.id = is_liked.zoom_review_id
-WHERE zoom_review.zoom_id = $2
 GROUP BY zoom_review.id,
   "user".id
 ORDER BY zoom_review.id DESC

@@ -13,16 +13,16 @@ export const Query: QueryResolvers<ApolloContext> = {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     let sql = reviews
-    // const values = [pagination.limit]
+    const values = [pagination.limit]
 
     const { rowCount } = await poolQuery(checkZoom, [zoomId])
     if (rowCount === 0) throw new UserInputError(`zoom:${zoomId}는 존재하지 않습니다.`)
 
     // pagination
-    // if (pagination.lastId) {
-    //   sql = buildSelect(sql, 'WHERE', 'zoom_review.id < $1')
-    //   values.push(pagination.lastId)
-    // }
+    if (pagination.lastId) {
+      sql = buildSelect(sql, 'WHERE', 'zoom_review.id < $1')
+      values.push(pagination.lastId)
+    }
 
     const { rows } = await poolQuery(sql, [userId, zoomId])
 
