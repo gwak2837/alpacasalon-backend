@@ -23,7 +23,7 @@ function verifyTargetCustomer(user: any) {
     user.id === 2003890986 || // 토리
     user.id === 1990358042 || // 또리
     user.id === 2026354632 || // 수리
-    user.id === 2045905961 || // ?
+    user.id === 2045905961 || // 임지연
     user.id === 2013581948 || // 시리
     user.id === 2064695827 || // 아리
     user.id === 2073558438 || // 블리
@@ -34,6 +34,16 @@ function verifyTargetCustomer(user: any) {
 
 function hasRequiredInfo(user: any) {
   return user.nickname && user.phone_number
+}
+
+function getFrontendUrl(referer?: string) {
+  switch (referer) {
+    case 'https://accounts.kakao.com/':
+    case undefined:
+      return process.env.FRONTEND_URL
+    default:
+      return referer.substring(0, referer?.length - 1)
+  }
 }
 
 async function fetchKakaoUserToken(code: string) {
@@ -83,8 +93,7 @@ export function setOAuthStrategies(app: Express) {
     const kakaoUserInfo = await fetchKakaoUserInfo(kakaoUserToken.access_token as string)
     const kakaoAccount = kakaoUserInfo.kakao_account as any
     const referer = req.headers.referer
-    const frontendUrl = referer?.substring(0, referer?.length - 1) ?? process.env.FRONTEND_URL
-    console.log('👀 - frontendUrl', frontendUrl)
+    const frontendUrl = getFrontendUrl(referer)
 
     // 선택항목 미동의 시 다른 페이지로 리다이렉트 하기
     if (!kakaoAccount.birthyear || !kakaoAccount.birthday || !kakaoAccount.gender) {
