@@ -3,11 +3,11 @@ import { AuthenticationError, UserInputError } from 'apollo-server-errors'
 import { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
 import { MutationResolvers, ZoomReview } from '../generated/graphql'
-import createZoomReview from './sql/createZoomReview.sql'
 import checkZoom from './sql/checkZoom.sql'
 import checkZoomReview from './sql/checkZoomReview.sql'
-import createOrDeleteZoomReviewLike from './sql/createOrDeleteZoomReviewLike.sql'
 import countZoomReviewLike from './sql/countZoomReviewLike.sql'
+import createZoomReview from './sql/createZoomReview.sql'
+import toggleLikingZoomReview from './sql/toggleLikingZoomReview.sql'
 
 export const Mutation: MutationResolvers<ApolloContext> = {
   createZoomReview: async (_, { input }, { userId }) => {
@@ -29,14 +29,12 @@ export const Mutation: MutationResolvers<ApolloContext> = {
     const { rowCount } = await poolQuery(checkZoomReview, [id])
     if (rowCount === 0) throw new UserInputError('해당 정보가 잘못 되었습니다.')
 
-    const likeResult = await poolQuery(createOrDeleteZoomReviewLike, [userId, id])
-
-    const countResult = await poolQuery(countZoomReviewLike, [id])
+    const { rows } = await poolQuery(toggleLikingZoomReview, [userId, id])
 
     return {
       id,
-      isLiked: likeResult.rows[0].result,
-      likedCount: countResult.rows[0].counts,
+      isLiked: rows[0].result,
+      likedCount: rows[0].likes_count,
     } as ZoomReview
   },
 }

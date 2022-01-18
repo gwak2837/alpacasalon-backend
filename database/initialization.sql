@@ -447,7 +447,8 @@ END $$;
 CREATE FUNCTION toggle_liking_zoom_review (
   user_id uuid,
   zoom_review_id bigint,
-  out result boolean
+  out result boolean,
+  out likes_count int
 ) LANGUAGE plpgsql AS $$ BEGIN PERFORM
 FROM user_x_liked_zoom_review
 WHERE user_x_liked_zoom_review.user_id = toggle_liking_zoom_review.user_id
@@ -470,5 +471,9 @@ VALUES (
 result = TRUE;
 
 END IF;
+
+SELECT COUNT(user_x_liked_zoom_review.user_id) INTO likes_count
+FROM user_x_liked_zoom_review
+WHERE user_x_liked_zoom_review.zoom_review_id = toggle_liking_zoom_review.zoom_review_id;
 
 END $$;
