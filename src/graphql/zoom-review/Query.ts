@@ -1,4 +1,4 @@
-import { UserInputError } from 'apollo-server-errors'
+import { AuthenticationError, UserInputError } from 'apollo-server-errors'
 
 import { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
@@ -9,7 +9,9 @@ import checkZoom from './sql/checkZoom.sql'
 import reviews from './sql/reviews.sql'
 
 export const Query: QueryResolvers<ApolloContext> = {
-  zoomReviews: async (_, { pagination, zoomId }) => {
+  zoomReviews: async (_, { pagination, zoomId }, { userId }) => {
+    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
+
     let sql = reviews
     const values = [pagination.limit]
 
@@ -22,7 +24,7 @@ export const Query: QueryResolvers<ApolloContext> = {
       values.push(pagination.lastId)
     }
 
-    const { rows } = await poolQuery(sql, values)
+    const { rows } = await poolQuery(sql, [userId, zoomId])
 
     return rows.map((row) => graphqlRelationMapping(row))
   },

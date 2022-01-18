@@ -1,5 +1,7 @@
 type Mutation {
   createZoomReview(input: ZoomReviewCreationInput!): ZoomReview
+
+  toggleLikingZoomReview(id: ID!): ZoomReview
 }
 
 input ZoomReviewCreationInput {

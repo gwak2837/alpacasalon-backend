@@ -443,3 +443,37 @@ WHERE title LIKE ANY (keywords)
   OR contents LIKE ANY (keywords);
 
 END $$;
+
+CREATE FUNCTION toggle_liking_zoom_review (
+  user_id uuid,
+  zoom_review_id bigint,
+  out result boolean,
+  out likes_count int
+) LANGUAGE plpgsql AS $$ BEGIN PERFORM
+FROM user_x_liked_zoom_review
+WHERE user_x_liked_zoom_review.user_id = toggle_liking_zoom_review.user_id
+  AND user_x_liked_zoom_review.zoom_review_id = toggle_liking_zoom_review.zoom_review_id;
+
+IF FOUND THEN
+DELETE FROM user_x_liked_zoom_review
+WHERE user_x_liked_zoom_review.user_id = toggle_liking_zoom_review.user_id
+  AND user_x_liked_zoom_review.zoom_review_id = toggle_liking_zoom_review.zoom_review_id;
+
+result = FALSE;
+
+ELSE
+INSERT INTO user_x_liked_zoom_review (user_id, zoom_review_id)
+VALUES (
+    toggle_liking_zoom_review.user_id,
+    toggle_liking_zoom_review.zoom_review_id
+  );
+
+result = TRUE;
+
+END IF;
+
+SELECT COUNT(user_x_liked_zoom_review.user_id) INTO likes_count
+FROM user_x_liked_zoom_review
+WHERE user_x_liked_zoom_review.zoom_review_id = toggle_liking_zoom_review.zoom_review_id;
+
+END $$;

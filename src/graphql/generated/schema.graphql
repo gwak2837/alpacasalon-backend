@@ -97,6 +97,7 @@ type Mutation {
   logout: Boolean!
   readNotifications(ids: [ID!]!): NonNegativeInt
   toggleLikingComment(id: ID!): Comment
+  toggleLikingZoomReview(id: ID!): ZoomReview
 
   """
   회원탈퇴 시 사용자 정보가 모두 초기화됩니다
@@ -370,6 +371,8 @@ type ZoomReview {
   contents: NonEmptyString
   creationTime: DateTime!
   id: ID!
+  isLiked: Boolean!
+  likedCount: NonNegativeInt!
   modificationTime: DateTime!
   writer: User
 }
