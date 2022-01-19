@@ -11,12 +11,12 @@ export const Query: QueryResolvers<ApolloContext> = {
   commentsByPost: async (_, { postId }, { userId }) => {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
-    // const doesUserJoinGroupResult = await poolQuery(doesUserJoinGroup, [postId, userId])
-    // if (doesUserJoinGroupResult.rows[0].user_id == userId)
-    //   throw new ForbiddenError('그룹에 가입해주세요.')
+    const { rows } = await poolQuery(doesUserJoinGroup, [userId, postId])
 
-    const { rows } = await poolQuery(commentsByPost, [postId, userId])
+    if (!rows[0].user_id) throw new ForbiddenError('해당 그룹에 속해 있지 않습니다.')
 
-    return commentORM(rows)
+    const { rows: rows2 } = await poolQuery(commentsByPost, [postId, userId])
+
+    return commentORM(rows2)
   },
 }
