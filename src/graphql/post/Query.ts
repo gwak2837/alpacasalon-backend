@@ -24,7 +24,7 @@ export const Query: QueryResolvers<ApolloContext> = {
 
     if (groupId) {
       const { rowCount: rowCount2 } = await poolQuery(doesUserJoinGroup, [groupId, userId])
-      if (rowCount2 === 0) throw new ForbiddenError('해당 그룹에 속해 있지 않습니다.')
+      if (rowCount2 === 0) throw new ForbiddenError('해당 그룹에 속해 있지 않습니다.', { groupId })
     }
 
     return graphqlRelationMapping(rows[0])
