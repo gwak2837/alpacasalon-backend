@@ -52,8 +52,8 @@ export const Query: QueryResolvers<ApolloContext> = {
   },
 
   zoomRecommend: async () => {
-    const test = await poolQuery(zoomRecommend)
+    const { rows } = await poolQuery(zoomRecommend)
 
-    return 1 as any
+    return rows.map((row) => graphqlRelationMapping(row))
   },
 }
