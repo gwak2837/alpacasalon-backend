@@ -290,6 +290,7 @@ type Query {
   글 상세
   """
   zoom(id: ID!): Zoom
+  zoomRecommend: [Zoom!]
 
   """
   review 목록
