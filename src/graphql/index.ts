@@ -16,11 +16,13 @@ import * as postQueryResolver from './post/Query'
 import * as userMutationResolver from './user/Mutation'
 import * as userObjectResolver from './user/Object'
 import * as userQueryResolver from './user/Query'
+import * as zoomReviewMutationResolver from './zoom-review/Mutation'
+import * as zoomReviewObjectResolver from './zoom-review/Object'
+import * as zoomReviewQueryResolver from './zoom-review/Query'
 import * as zoomMutationResolver from './zoom/Mutation'
 import * as zoomObjectResolver from './zoom/Object'
 import * as zoomQueryResolver from './zoom/Query'
-import * as zoomReviewMutationResolver from './review/Mutation'
-import * as zoomReviewQueryResolver from './review/Query'
+
 const resolversArray = [
   commentMutationResolver,
   commentObjectResolver,
@@ -42,6 +44,7 @@ const resolversArray = [
   zoomObjectResolver,
   zoomQueryResolver,
   zoomReviewMutationResolver,
+  zoomReviewObjectResolver,
   zoomReviewQueryResolver,
 ]
 

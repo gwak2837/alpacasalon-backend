@@ -1,31 +1,31 @@
-import { UserInputError } from 'apollo-server-errors'
+import { AuthenticationError, UserInputError } from 'apollo-server-errors'
+
 import { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
 import { buildSelect } from '../../utils/sql'
+import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
-import { zoomReviewORM } from './ORM'
 import checkZoom from './sql/checkZoom.sql'
 import reviews from './sql/reviews.sql'
 
 export const Query: QueryResolvers<ApolloContext> = {
-  zoomReviews: async (_, { pagination, zoomId }) => {
+  zoomReviews: async (_, { pagination, zoomId }, { userId }) => {
+    if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
+
     let sql = reviews
     const values = [pagination.limit]
-    if (!zoomId) {
-      throw new UserInputError('')
-    }
 
     const { rowCount } = await poolQuery(checkZoom, [zoomId])
-    if (rowCount === 0) throw new UserInputError('유효하지 않은 정보입니다.')
+    if (rowCount === 0) throw new UserInputError(`zoom:${zoomId}는 존재하지 않습니다.`)
 
     // pagination
     if (pagination.lastId) {
-      sql = buildSelect(sql, 'WHERE', 'zoom_review.id >  $1')
+      sql = buildSelect(sql, 'WHERE', 'zoom_review.id < $1')
       values.push(pagination.lastId)
     }
 
-    const { rows } = await poolQuery(sql, values)
+    const { rows } = await poolQuery(sql, [userId, zoomId])
 
-    return rows.map((row) => zoomReviewORM(row))
+    return rows.map((row) => graphqlRelationMapping(row))
   },
 }

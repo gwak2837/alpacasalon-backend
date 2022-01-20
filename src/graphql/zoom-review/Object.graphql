@@ -1,8 +1,9 @@
-type Review {
+type ZoomReview {
   id: ID!
   creationTime: DateTime!
   modificationTime: DateTime!
   contents: NonEmptyString
-
+  isLiked: Boolean!
+  likedCount: NonNegativeInt!
   writer: User
 }

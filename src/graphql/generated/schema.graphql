@@ -83,7 +83,7 @@ type Mutation {
   createPoll(input: PollCreationInput!): Poll
   createPost(input: PostCreationInput!): Post
   createZoom(input: ZoomCreationInput!): Zoom
-  createZoomReview(input: ReviewCreationInput!): Review
+  createZoomReview(input: ZoomReviewCreationInput!): ZoomReview
   deleteComment(id: ID!): Comment
   deleteGroup(id: ID!): Group
   deletePost(id: ID!): Post
@@ -97,6 +97,7 @@ type Mutation {
   logout: Boolean!
   readNotifications(ids: [ID!]!): NonNegativeInt
   toggleLikingComment(id: ID!): Comment
+  toggleLikingZoomReview(id: ID!): ZoomReview
 
   """
   회원탈퇴 시 사용자 정보가 모두 초기화됩니다
@@ -128,6 +129,7 @@ type Notification {
 }
 
 enum NotificationType {
+  HOT_POST
   LIKING_COMMENT
   NEW_COMMENT
   NEW_SUBCOMMENT
@@ -230,6 +232,7 @@ type Query {
   """
   famousPosts: [Post!]
   group(id: ID!): Group
+  isGroupNameUnique(name: NonEmptyString!): Boolean!
 
   """
   사용자 닉네임 중복 여부 검사
@@ -291,25 +294,13 @@ type Query {
   """
   review 목록
   """
-  zoomReviews(pagination: Pagination!, zoomId: ID!): [Review!]
+  zoomReviews(pagination: Pagination!, zoomId: ID!): [ZoomReview!]
+  zoomTitleById(id: ID!): Zoom
 
   """
   글 목록
   """
   zooms(pagination: Pagination!): [Zoom!]
-}
-
-type Review {
-  contents: NonEmptyString
-  creationTime: DateTime!
-  id: ID!
-  modificationTime: DateTime!
-  writer: User
-}
-
-input ReviewCreationInput {
-  contents: NonEmptyString
-  zoomId: ID!
 }
 
 enum Status {
@@ -374,4 +365,19 @@ input ZoomModificationInput {
   id: ID!
   imageUrl: URL
   title: NonEmptyString
+}
+
+type ZoomReview {
+  contents: NonEmptyString
+  creationTime: DateTime!
+  id: ID!
+  isLiked: Boolean!
+  likedCount: NonNegativeInt!
+  modificationTime: DateTime!
+  writer: User
+}
+
+input ZoomReviewCreationInput {
+  contents: NonEmptyString!
+  zoomId: ID!
 }

@@ -1,11 +1,11 @@
 version: '3.9'
 
 services:
-  alpaca-salon-server:
+  alpacasalon-server:
     build: .
-    container_name: alpaca-salon-server
+    container_name: alpacasalon-server
     env_file: .env
-    image: alpaca-salon-server:latest
+    image: alpacasalon-server:latest
     # restart: always
     ports:
       - $PORT:$PORT

@@ -28,7 +28,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
       input.groupId,
     ])
 
-    return graphqlRelationMapping(rows[0], 'post')
+    return graphqlRelationMapping(rows[0])
   },
 
   updatePost: async (_, { input }, { userId }) => {
@@ -47,7 +47,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
         `id:${input.id} 의 게시글이 존재하지 않거나, 해당 게시글의 작성자가 아닙니다.`
       )
 
-    return graphqlRelationMapping(rows[0], 'post')
+    return graphqlRelationMapping(rows[0])
   },
 
   deletePost: async (_, { id }, { userId }) => {
@@ -57,6 +57,6 @@ export const Mutation: MutationResolvers<ApolloContext> = {
 
     if (rowCount === 0) throw new UserInputError(`id:${id} 의 게시글이 존재하지 않습니다.`)
 
-    return graphqlRelationMapping(rows[0], 'post')
+    return graphqlRelationMapping(rows[0])
   },
 }

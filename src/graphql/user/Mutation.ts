@@ -27,7 +27,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
 
     const { rows } = await poolQuery(unregister, [userId])
 
-    return graphqlRelationMapping(rows[0], 'user')
+    return graphqlRelationMapping(rows[0])
   },
 
   updateUser: async (_, { input }, { userId }) => {
@@ -45,6 +45,6 @@ export const Mutation: MutationResolvers<ApolloContext> = {
       userId,
     ])
 
-    return graphqlRelationMapping(rows[0], 'user')
+    return graphqlRelationMapping(rows[0])
   },
 }
