@@ -35,7 +35,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
         pool
           .query(createLikingCommentNotification, [
             getFirstLine(rows[0].contents),
-            `/post/${postId}?commentId=${1}`,
+            `/post/${postId}?commentId=${id}`,
             commentAuthor,
             userId,
           ])
