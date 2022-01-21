@@ -1,2 +1,1 @@
-id,creation_time,type,contents,is_read,receiver_id,sender_id
-3,2021-12-29 22:41:55.246669+09,0,asdsad,f,ee360834-955c-4011-88b1-a71e78ec7630,
+id,creation_time,type,contents,link,is_read,receiver_id,sender_id

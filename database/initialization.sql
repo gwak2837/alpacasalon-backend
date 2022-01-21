@@ -114,6 +114,7 @@ CREATE TABLE notification (
   creation_time timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "type" int NOT NULL,
   contents text NOT NULL,
+  link text NOT NULL,
   is_read boolean NOT NULL DEFAULT FALSE,
   --
   receiver_id uuid NOT NULL REFERENCES "user" ON DELETE CASCADE,
