@@ -114,8 +114,8 @@ export type Mutation = {
 }
 
 export type MutationCreateCommentArgs = {
-  commentId?: InputMaybe<Scalars['ID']>
   contents: Scalars['NonEmptyString']
+  parentCommentId?: InputMaybe<Scalars['ID']>
   postId: Scalars['ID']
 }
 
@@ -202,6 +202,7 @@ export type Notification = {
   creationTime: Scalars['DateTime']
   id: Scalars['ID']
   isRead: Scalars['Boolean']
+  link: Scalars['NonEmptyString']
   receiver: User
   sender?: Maybe<User>
   type: NotificationType
@@ -855,6 +856,7 @@ export type NotificationResolvers<
   creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  link?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
   receiver?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   sender?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   type?: Resolver<ResolversTypes['NotificationType'], ParentType, ContextType>

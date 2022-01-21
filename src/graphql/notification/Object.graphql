@@ -3,6 +3,7 @@ type Notification {
   creationTime: DateTime!
   type: NotificationType!
   contents: NonEmptyString!
+  link: NonEmptyString!
   isRead: Boolean!
 
   # from other table

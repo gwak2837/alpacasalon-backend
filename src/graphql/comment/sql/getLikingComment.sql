@@ -1,4 +1,5 @@
 SELECT contents,
-  user_id
+  user_id,
+  post_id
 FROM "comment"
 WHERE id = $1

@@ -7,9 +7,9 @@ import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
 import myZooms from './sql/myZooms.sql'
 import zoom from './sql/zoom.sql'
+import zoomRecommend from './sql/zoomRecommend.sql'
 import zooms from './sql/zooms.sql'
 import zoomTitleById from './sql/zoomTitleById.sql'
-import zoomRecommend from './sql/zoomRecommend.sql'
 
 export const Query: QueryResolvers<ApolloContext> = {
   zoom: async (_, { id }, { userId }) => {
