@@ -326,6 +326,7 @@ export type Query = {
   userByNickname?: Maybe<User>
   /** 글 상세 */
   zoom?: Maybe<Zoom>
+  zoomRecommend?: Maybe<Array<Zoom>>
   /** review 목록 */
   zoomReviews?: Maybe<Array<ZoomReview>>
   zoomTitleById?: Maybe<Zoom>
@@ -1002,6 +1003,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryZoomArgs, 'id'>
   >
+  zoomRecommend?: Resolver<Maybe<Array<ResolversTypes['Zoom']>>, ParentType, ContextType>
   zoomReviews?: Resolver<
     Maybe<Array<ResolversTypes['ZoomReview']>>,
     ParentType,

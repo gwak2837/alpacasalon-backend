@@ -11,4 +11,6 @@ type Query {
   myZooms: [Zoom!]
 
   zoomTitleById(id: ID!): Zoom
+
+  zoomRecommend: [Zoom!]
 }
