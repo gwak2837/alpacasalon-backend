@@ -23,6 +23,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
 
     const { rows } = await poolQuery(getLikingComment, [id])
     const commentAuthor = rows[0].user_id
+    const postId = rows[0].post_id
 
     if (commentAuthor === userId) throw new UserInputError('댓글 자추는 지양해주세요~')
 
@@ -34,6 +35,7 @@ export const Mutation: MutationResolvers<ApolloContext> = {
         pool
           .query(createLikingCommentNotification, [
             getFirstLine(rows[0].contents),
+            `/post/${postId}?commentId=${id}`,
             commentAuthor,
             userId,
           ])
@@ -53,27 +55,29 @@ export const Mutation: MutationResolvers<ApolloContext> = {
     return { id, isLiked, likedCount: rows2[0].liked_count } as Comment
   },
 
-  createComment: async (_, { postId, contents, commentId }, { userId }) => {
+  createComment: async (_, { postId, contents, parentCommentId }, { userId }) => {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
-    if (commentId) {
-      const { rowCount } = await poolQuery(checkCommentInPost, [postId, commentId])
+    if (parentCommentId) {
+      const { rowCount } = await poolQuery(checkCommentInPost, [postId, parentCommentId])
       if (rowCount === 0)
         throw new UserInputError(
-          `postId: ${postId}, commentId: ${commentId} 에 해당하는 댓글에 대댓글을 작성할 수 없습니다.`
+          `postId: ${postId}, parentCommentId: ${parentCommentId} 에 해당하는 댓글에 대댓글을 작성할 수 없습니다.`
         )
     }
 
-    const { rows } = await poolQuery(createComment, [contents, postId, userId, commentId])
+    const { rows } = await poolQuery(createComment, [contents, postId, userId, parentCommentId])
+    const commentId = rows[0].id
 
-    if (commentId) {
+    if (parentCommentId) {
       pool
-        .query(getUserIdOfParentComment, [commentId])
+        .query(getUserIdOfParentComment, [parentCommentId])
         .then(({ rows }) => {
           const parentCommentAuthorId = rows[0].user_id
           if (parentCommentAuthorId && userId !== parentCommentAuthorId) {
             poolQuery(createNewSubcommentNotification, [
               getFirstLine(contents),
+              `/post/${postId}?commentId=${commentId}`,
               parentCommentAuthorId,
               userId,
             ])
@@ -86,7 +90,12 @@ export const Mutation: MutationResolvers<ApolloContext> = {
         .then(({ rows }) => {
           const postAuthorId = rows[0].user_id
           if (postAuthorId && userId !== postAuthorId) {
-            poolQuery(createNewCommentNotification, [getFirstLine(contents), postAuthorId, userId])
+            poolQuery(createNewCommentNotification, [
+              getFirstLine(contents),
+              `/post/${postId}?commentId=${commentId}`,
+              postAuthorId,
+              userId,
+            ])
           }
         })
         .catch((err) => console.error(err))

@@ -114,8 +114,8 @@ export type Mutation = {
 }
 
 export type MutationCreateCommentArgs = {
-  commentId?: InputMaybe<Scalars['ID']>
   contents: Scalars['NonEmptyString']
+  parentCommentId?: InputMaybe<Scalars['ID']>
   postId: Scalars['ID']
 }
 
@@ -202,6 +202,7 @@ export type Notification = {
   creationTime: Scalars['DateTime']
   id: Scalars['ID']
   isRead: Scalars['Boolean']
+  link: Scalars['NonEmptyString']
   receiver: User
   sender?: Maybe<User>
   type: NotificationType
@@ -326,6 +327,7 @@ export type Query = {
   userByNickname?: Maybe<User>
   /** 글 상세 */
   zoom?: Maybe<Zoom>
+  zoomRecommend?: Maybe<Array<Zoom>>
   /** review 목록 */
   zoomReviews?: Maybe<Array<ZoomReview>>
   zoomTitleById?: Maybe<Zoom>
@@ -854,6 +856,7 @@ export type NotificationResolvers<
   creationTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   isRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  link?: Resolver<ResolversTypes['NonEmptyString'], ParentType, ContextType>
   receiver?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   sender?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   type?: Resolver<ResolversTypes['NotificationType'], ParentType, ContextType>
@@ -1002,6 +1005,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryZoomArgs, 'id'>
   >
+  zoomRecommend?: Resolver<Maybe<Array<ResolversTypes['Zoom']>>, ParentType, ContextType>
   zoomReviews?: Resolver<
     Maybe<Array<ResolversTypes['ZoomReview']>>,
     ParentType,

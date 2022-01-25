@@ -7,6 +7,7 @@ import { graphqlRelationMapping } from '../common/ORM'
 import { QueryResolvers } from '../generated/graphql'
 import myZooms from './sql/myZooms.sql'
 import zoom from './sql/zoom.sql'
+import zoomRecommend from './sql/zoomRecommend.sql'
 import zooms from './sql/zooms.sql'
 import zoomTitleById from './sql/zoomTitleById.sql'
 
@@ -48,5 +49,11 @@ export const Query: QueryResolvers<ApolloContext> = {
     const { rows } = await poolQuery(zoomTitleById, [id])
 
     return graphqlRelationMapping(rows[0])
+  },
+
+  zoomRecommend: async () => {
+    const { rows } = await poolQuery(zoomRecommend)
+
+    return rows.map((row) => graphqlRelationMapping(row))
   },
 }

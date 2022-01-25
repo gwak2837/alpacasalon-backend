@@ -78,7 +78,7 @@ scalar Latitude
 scalar Longitude
 
 type Mutation {
-  createComment(commentId: ID, contents: NonEmptyString!, postId: ID!): Comment
+  createComment(contents: NonEmptyString!, parentCommentId: ID, postId: ID!): Comment
   createGroup(input: GroupCreationInput!): Group
   createPoll(input: PollCreationInput!): Poll
   createPost(input: PostCreationInput!): Post
@@ -123,6 +123,7 @@ type Notification {
   creationTime: DateTime!
   id: ID!
   isRead: Boolean!
+  link: NonEmptyString!
   receiver: User!
   sender: User
   type: NotificationType!
@@ -290,6 +291,7 @@ type Query {
   글 상세
   """
   zoom(id: ID!): Zoom
+  zoomRecommend: [Zoom!]
 
   """
   review 목록
