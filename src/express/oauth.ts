@@ -39,6 +39,7 @@ function hasRequiredInfo(user: any) {
 function getFrontendUrl(referer?: string) {
   switch (referer) {
     case 'https://accounts.kakao.com/':
+    case 'https://kauth.kakao.com/':
     case undefined:
       return process.env.FRONTEND_URL
     default:
