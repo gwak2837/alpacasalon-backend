@@ -62,18 +62,16 @@ export const Mutation: MutationResolvers<ApolloContext> = {
     const receiverPhoneNumber = `0${rows[0].phone_number.replace(/\D/g, '').slice(2)}`
     const zoomTitle = rows[0].title.replace(/\n/g, '')
 
-    const result = await send({
+    send({
       message: {
         to: receiverPhoneNumber,
         from,
         text: `${rows[0].nickname}님, "${zoomTitle}" 줌 대화 신청이 완료되었습니다.`,
-        kakaoOptions: {
-          pfId,
-          adFlag: true,
-        },
+        kakaoOptions: { pfId },
       },
     })
-    console.log('RESULT:', result)
+      .then((result) => console.log(result))
+      .catch((err) => console.error(err))
 
     return { id, isJoined: rows[0].result } as Zoom
   },
