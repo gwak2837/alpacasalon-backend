@@ -2,6 +2,7 @@ import { AuthenticationError, UserInputError } from 'apollo-server-errors'
 
 import type { ApolloContext } from '../../apollo/server'
 import { poolQuery } from '../../database/postgres'
+import { from, pfId, send } from '../../utils/solapi'
 import { graphqlRelationMapping } from '../common/ORM'
 import { MutationResolvers, Zoom } from '../generated/graphql'
 import createZoom from './sql/createZoom.sql'
@@ -57,6 +58,22 @@ export const Mutation: MutationResolvers<ApolloContext> = {
     if (!userId) throw new AuthenticationError('로그인 후 시도해주세요.')
 
     const { rows } = await poolQuery(joinZoom, [userId, id])
+
+    const receiverPhoneNumber = `0${rows[0].phone_number.replace(/\D/g, '').slice(2)}`
+    const zoomTitle = rows[0].title.replace(/\n/g, '')
+
+    const result = await send({
+      message: {
+        to: receiverPhoneNumber,
+        from,
+        text: `${rows[0].nickname}님, "${zoomTitle}" 줌 대화 신청이 완료되었습니다.`,
+        kakaoOptions: {
+          pfId,
+          adFlag: true,
+        },
+      },
+    })
+    console.log('RESULT:', result)
 
     return { id, isJoined: rows[0].result } as Zoom
   },

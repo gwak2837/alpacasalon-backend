@@ -411,7 +411,10 @@ END $$;
 CREATE FUNCTION toggle_joining_zoom (
   user_id uuid,
   zoom_id bigint,
-  out result boolean
+  out result boolean,
+  out nickname varchar(20),
+  out phone_number varchar(20),
+  out title text
 ) LANGUAGE plpgsql AS $$ BEGIN PERFORM
 FROM user_x_joined_zoom
 WHERE user_x_joined_zoom.user_id = toggle_joining_zoom.user_id
@@ -434,6 +437,16 @@ VALUES (
 result = TRUE;
 
 END IF;
+
+SELECT zoom.title INTO toggle_joining_zoom.title
+FROM zoom
+WHERE id = zoom_id;
+
+SELECT "user".nickname,
+  "user".phone_number INTO toggle_joining_zoom.nickname,
+  toggle_joining_zoom.phone_number
+FROM "user"
+WHERE id = user_id;
 
 END $$;
 
